@@ -355,6 +355,116 @@
       "bpm": 76,
       "license": "Musopen Public Domain",
       "author": "Johann Sebastian Bach"
+    },
+    {
+      "id": "beethoven_symphony_no5_allegro",
+      "name": "Beethoven - Symphony No. 5: I. Allegro con brio",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/beethoven_symphony_no5_allegro.mp3",
+      "mood": "dramatic, iconic, high tension, majestic orchestral",
+      "bpm": 108,
+      "license": "EFF Open Audio License / Musopen Public Domain",
+      "author": "Fulda Symphonic Orchestra / Simon Schindler"
+    },
+    {
+      "id": "beethoven_symphony_no9_ode_to_joy",
+      "name": "Beethoven - Symphony No. 9: IV. Presto (Ode to Joy)",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/beethoven_symphony_no9_ode_to_joy.mp3",
+      "mood": "triumphant, majestic, hopeful, peak emotional crescendo",
+      "bpm": 120,
+      "license": "Musopen Public Domain",
+      "author": "Musopen Symphony Orchestra"
+    },
+    {
+      "id": "beethoven_symphony_no6_pastoral",
+      "name": "Beethoven - Symphony No. 6 'Pastoral': I. Allegro",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/beethoven_symphony_no6_pastoral.mp3",
+      "mood": "peaceful, countryside, joyful arrival, serene strings",
+      "bpm": 96,
+      "license": "Musopen Public Domain",
+      "author": "Musopen Symphony Orchestra"
+    },
+    {
+      "id": "mozart_symphony_no40_molto_allegro",
+      "name": "Mozart - Symphony No. 40 in G minor: I. Molto allegro",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/mozart_symphony_no40_molto_allegro.mp3",
+      "mood": "urgent, dramatic minor-key, driving classical pulse",
+      "bpm": 134,
+      "license": "EFF Open Audio License / Musopen Public Domain",
+      "author": "Fulda Symphonic Orchestra / Simon Schindler"
+    },
+    {
+      "id": "mozart_symphony_no25_allegro_con_brio",
+      "name": "Mozart - Symphony No. 25 in G minor: I. Allegro con brio",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/mozart_symphony_no25_allegro_con_brio.mp3",
+      "mood": "storm and stress, syncopated, dark cinematic energy, Amadeus",
+      "bpm": 140,
+      "license": "Musopen Public Domain",
+      "author": "European Archive / Musopen"
+    },
+    {
+      "id": "mozart_eine_kleine_nachtmusik_allegro",
+      "name": "Mozart - Eine kleine Nachtmusik: I. Allegro",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/mozart_eine_kleine_nachtmusik_allegro.mp3",
+      "mood": "sparkling, elegant, upbeat classical strings, regal",
+      "bpm": 136,
+      "license": "Musopen Public Domain",
+      "author": "Musopen String Ensemble"
+    },
+    {
+      "id": "mozart_marriage_of_figaro_overture",
+      "name": "Mozart - The Marriage of Figaro: Overture",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/mozart_marriage_of_figaro_overture.mp3",
+      "mood": "high-speed, effervescent, breathless excitement, comedic brilliance",
+      "bpm": 144,
+      "license": "Musopen Public Domain",
+      "author": "Musopen Symphony Orchestra"
+    },
+    {
+      "id": "phonk_drift_tokyo_rush",
+      "name": "Phonk Drift Tokyo Rush",
+      "category": "high_speed_beats",
+      "filename": "bg_music/high_speed_beats/phonk_drift_tokyo_rush.mp3",
+      "mood": "aggressive, drift, phonk, 808 cowbell, viral fast",
+      "bpm": 150,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy DSP Engine"
+    },
+    {
+      "id": "cyberpunk_high_speed_overdrive",
+      "name": "Cyberpunk High-Speed Overdrive",
+      "category": "high_speed_beats",
+      "filename": "bg_music/high_speed_beats/cyberpunk_high_speed_overdrive.mp3",
+      "mood": "driving, cyber, fast electro, synthwave, action",
+      "bpm": 140,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy DSP Engine"
+    },
+    {
+      "id": "dnb_drum_and_bass_velocity",
+      "name": "Drum & Bass Velocity 174",
+      "category": "high_speed_beats",
+      "filename": "bg_music/high_speed_beats/dnb_drum_and_bass_velocity.mp3",
+      "mood": "ultra-fast, drum and bass, 174 bpm, breakbeat, sports",
+      "bpm": 174,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy DSP Engine"
+    },
+    {
+      "id": "hardstyle_fast_drop_adrenaline",
+      "name": "Hardstyle Fast Drop Adrenaline",
+      "category": "high_speed_beats",
+      "filename": "bg_music/high_speed_beats/hardstyle_fast_drop_adrenaline.mp3",
+      "mood": "adrenaline, 160 bpm, edm, reverse bass, high beats",
+      "bpm": 160,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy DSP Engine"
     }
   ]
 }

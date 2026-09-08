@@ -49,6 +49,17 @@ Videofy includes a completely transparent, royalty-free audio library designed f
 | **Satie - Gymnopédie No. 1** | `classical_heritage` | minimalist, melancholic, slow | 62 | Musopen Public Domain (Erik Satie) |
 | **Vivaldi - Four Seasons: Winter** | `classical_heritage` | baroque, serene, cozy indoor | 68 | Musopen Public Domain (Antonio Vivaldi) |
 | **Bach - Cello Suite No. 1 Prelude** | `classical_heritage` | cello, organic, warm, timeless | 76 | Musopen Public Domain (Johann Sebastian Bach) |
+| **Beethoven - Symphony No. 5: I. Allegro con brio** | `classical_heritage` | dramatic, iconic, high tension, majestic orchestral | 108 | EFF Open Audio License / Musopen Public Domain (Fulda Symphonic Orchestra / Simon Schindler) |
+| **Beethoven - Symphony No. 9: IV. Presto (Ode to Joy)** | `classical_heritage` | triumphant, majestic, hopeful, peak emotional crescendo | 120 | Musopen Public Domain (Musopen Symphony Orchestra) |
+| **Beethoven - Symphony No. 6 'Pastoral': I. Allegro** | `classical_heritage` | peaceful, countryside, joyful arrival, serene strings | 96 | Musopen Public Domain (Musopen Symphony Orchestra) |
+| **Mozart - Symphony No. 40 in G minor: I. Molto allegro** | `classical_heritage` | urgent, dramatic minor-key, driving classical pulse | 134 | EFF Open Audio License / Musopen Public Domain (Fulda Symphonic Orchestra / Simon Schindler) |
+| **Mozart - Symphony No. 25 in G minor: I. Allegro con brio** | `classical_heritage` | storm and stress, syncopated, dark cinematic energy, Amadeus | 140 | Musopen Public Domain (European Archive / Musopen) |
+| **Mozart - Eine kleine Nachtmusik: I. Allegro** | `classical_heritage` | sparkling, elegant, upbeat classical strings, regal | 136 | Musopen Public Domain (Musopen String Ensemble) |
+| **Mozart - The Marriage of Figaro: Overture** | `classical_heritage` | high-speed, effervescent, breathless excitement, comedic brilliance | 144 | Musopen Public Domain (Musopen Symphony Orchestra) |
+| **Phonk Drift Tokyo Rush** | `high_speed_beats` | aggressive, drift, phonk, 808 cowbell, viral fast | 150 | CC0 1.0 Universal (Public Domain) (Videofy DSP Engine) |
+| **Cyberpunk High-Speed Overdrive** | `high_speed_beats` | driving, cyber, fast electro, synthwave, action | 140 | CC0 1.0 Universal (Public Domain) (Videofy DSP Engine) |
+| **Drum & Bass Velocity 174** | `high_speed_beats` | ultra-fast, drum and bass, 174 bpm, breakbeat, sports | 174 | CC0 1.0 Universal (Public Domain) (Videofy DSP Engine) |
+| **Hardstyle Fast Drop Adrenaline** | `high_speed_beats` | adrenaline, 160 bpm, edm, reverse bass, high beats | 160 | CC0 1.0 Universal (Public Domain) (Videofy DSP Engine) |
 
 ---
 
@@ -56,4 +67,4 @@ Videofy includes a completely transparent, royalty-free audio library designed f
 
 - **CC0 1.0 Universal**: Free for personal and commercial use without attribution.
 - **Musopen Public Domain**: Public domain musical compositions and open-access performances.
-- **CC-BY 3.0 / 4.0**: Free for commercial video production; attribution automatically included in Videofy outro CTA templates.
+- **EFF Open Audio License**: Free for commercial video production and distribution.
