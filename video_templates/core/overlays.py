@@ -84,6 +84,58 @@ def build_timeline_overlays(
 
         return ",".join(filters)
 
+    if black_bars and not is_portrait:
+        # =========================================================================
+        # CINEMATIC 16:9 LANDSCAPE BLACK BARS LAYOUT (Top: h=120px, Bottom: h=140px)
+        # =========================================================================
+        # 1. Top black matte bar
+        filters.append("drawbox=x=0:y=0:w=1920:h=120:color=black@1.0:t=fill")
+        # Gold accent hairline at base of top frame
+        filters.append("drawbox=x=0:y=118:w=1920:h=2:color=0xE5A93C@0.85:t=fill")
+        # Animated top progress bar along the accent line
+        filters.append(
+            f"drawbox=x=0:y=116:w='1920*(t/{total_duration:.3f})':h=3:color=0xFFD700@1:t=fill"
+        )
+
+        # Top Text: Location / Context representing the video journey
+        clean_in_title = clean_text(intro_title)
+        clean_in_sub = clean_text(intro_subtitle)
+        if clean_in_title:
+            filters.append(
+                f"drawtext=fontfile='{FONT_BOLD}':text='{clean_in_title}':fontsize=28:fontcolor=white:x=(w-text_w)/2:y=38"
+            )
+        if clean_in_sub:
+            filters.append(
+                f"drawtext=fontfile='{FONT_REG}':text='{clean_in_sub}':fontsize=17:fontcolor=0xE5A93C:x=(w-text_w)/2:y=76"
+            )
+
+        # 2. Bottom black matte bar (dedicated canvas for kinetic highlighted subtitles)
+        filters.append("drawbox=x=0:y=940:w=1920:h=140:color=black@1.0:t=fill")
+        # Gold accent hairline at top of bottom frame
+        filters.append("drawbox=x=0:y=940:w=1920:h=2:color=0xE5A93C@0.85:t=fill")
+
+        # 3. Outro CTA Card (final 4.0s) centered in visual viewport
+        outro_start = max(0.0, total_duration - 4.0)
+        outro_alpha = f"if(between(t,{outro_start:.2f},{total_duration:.2f}),if(lt(t,{outro_start+0.4:.2f}),(t-{outro_start:.2f})/0.4,1),0)"
+        clean_out_title = clean_text(outro_title)
+        clean_out_sub = clean_text(outro_subtitle)
+
+        if clean_out_title:
+            filters.append(
+                f"drawbox=x=560:y=450:w=800:h=180:color=black@0.85:t=fill:enable='between(t,{outro_start:.2f},{total_duration:.2f})'"
+            )
+            filters.append(
+                f"drawbox=x=560:y=450:w=800:h=4:color=0xE5A93C@0.95:t=fill:enable='between(t,{outro_start:.2f},{total_duration:.2f})'"
+            )
+            filters.append(
+                f"drawtext=fontfile='{FONT_BOLD}':text='{clean_out_title}':fontsize=40:fontcolor=white:x=(w-text_w)/2:y=485:alpha='{outro_alpha}'"
+            )
+            filters.append(
+                f"drawtext=fontfile='{FONT_REG}':text='{clean_out_sub}':fontsize=20:fontcolor=0xE5A93C:x=(w-text_w)/2:y=545:alpha='{outro_alpha}'"
+            )
+
+        return ",".join(filters)
+
     # Standard full-bleed layout
     pw = 1080 if is_portrait else 1920
     ph = 8 if is_portrait else 6

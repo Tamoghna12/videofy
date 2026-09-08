@@ -80,7 +80,10 @@ def generate_spaced_story_voiceover(
     speed: float = 0.92,
     reference_audio: Path = None,
     font_size: int = 50,
-    margin_v: int = 360
+    margin_v: int = 360,
+    play_res_x: int = 1080,
+    play_res_y: int = 1920,
+    margin_lr: int = 80
 ) -> dict:
     """
     Synthesizes spaced, contemplative storytelling voiceover across the video duration
@@ -261,15 +264,15 @@ print("SPACED_SYNTHESIS_SUCCESS")
     ass_lines = [
         "[Script Info]",
         "ScriptType: v4.00+",
-        "PlayResX: 1080",
-        "PlayResY: 1920",
+        f"PlayResX: {play_res_x}",
+        f"PlayResY: {play_res_y}",
         "WrapStyle: 0",
         "ScaledBorderAndShadow: yes",
         "",
         "[V4+ Styles]",
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
         # Style: Centered lower-third (Alignment=2), bold white with black outline and drop shadow
-        f"Style: Default, Liberation Sans, {font_size}, &H00FFFFFF, &H000000FF, &H00000000, &H90000000, 1, 0, 0, 0, 100, 100, 1.2, 0, 1, 3.5, 2.0, 2, 80, 80, {margin_v}, 1",
+        f"Style: Default, Liberation Sans, {font_size}, &H00FFFFFF, &H000000FF, &H00000000, &H90000000, 1, 0, 0, 0, 100, 100, 1.2, 0, 1, 3.5, 2.0, 2, {margin_lr}, {margin_lr}, {margin_v}, 1",
         "",
         "[Events]",
         "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",

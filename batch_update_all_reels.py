@@ -89,6 +89,11 @@ REELS = [
 ]
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Batch update all reels with cinematic framing and voiceover")
+    parser.add_argument("--include-bradford", action="store_true", help="Also render the 3 Bradford 16:9 Landscape reels")
+    args, _ = parser.parse_known_args()
+
     print("=" * 80)
     print("🎬 VIDEOPY BATCH UPGRADE: UPDATING ALL REELS WITH CINEMATIC BLACK BARS")
     print("=" * 80)
@@ -125,6 +130,12 @@ def main():
         except subprocess.CalledProcessError as e:
             print(f"  ❌ Failed: {r['name']} ({e})")
             sys.exit(1)
+
+    if args.include_bradford:
+        print("\n" + "=" * 80)
+        print("🎬 RENDERING BRADFORD 16:9 LANDSCAPE REELS...")
+        print("=" * 80)
+        subprocess.run([sys.executable, str(WORKSPACE_ROOT / "create_bradford_landscape_reels.py")], check=True)
 
     print("\n" + "=" * 80)
     print("🎉 ALL REELS SUCCESSFULLY UPDATED WITH CINEMATIC FRAMING & VOICE-STORYTELLING!")
