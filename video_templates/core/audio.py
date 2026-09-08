@@ -4,27 +4,88 @@ Handles soundtrack resolution, ambient audio bed mixing,
 smooth fade-ins/outs, and EBU R128 loudness normalization.
 """
 
+import json
 from pathlib import Path
 
 WORKSPACE_DIR = Path("/home/tamoghna/Documents/Video_editing")
-MUSIC_DIR = WORKSPACE_DIR / "bg_music"
-SFX_DIR = WORKSPACE_DIR / "assets" / "ambient_sfx"
+AUDIO_LIB_DIR = WORKSPACE_DIR / "assets" / "audio"
+AUDIO_SFX_DIR = AUDIO_LIB_DIR / "sfx"
+AUDIO_BGM_DIR = AUDIO_LIB_DIR / "bg_music"
+LEGACY_MUSIC_DIR = WORKSPACE_DIR / "bg_music"
+LEGACY_SFX_DIR = WORKSPACE_DIR / "assets" / "ambient_sfx"
+
+
+def get_audio_manifest():
+    """Load the comprehensive audio library manifest with metadata & licenses."""
+    manifest_path = AUDIO_LIB_DIR / "manifest.json"
+    if manifest_path.is_file():
+        try:
+            with open(manifest_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {"sfx": [], "bg_music": []}
 
 
 def resolve_audio(name_or_path, is_sfx=False):
-    """Resolve an audio file by filename or absolute path."""
+    """
+    Resolve an audio file by filename, relative path, or stem ID.
+    Searches assets/audio library first, then falls back to legacy directories.
+    """
     if not name_or_path:
         return None
     p = Path(name_or_path)
     if p.is_file():
         return p.resolve()
     
-    search_dir = SFX_DIR if is_sfx else MUSIC_DIR
-    if search_dir.exists():
-        matches = list(search_dir.glob(f"**/*{name_or_path}*"))
-        if matches:
-            return matches[0].resolve()
+    stem = p.stem.lower()
+    
+    # Priority directories depending on is_sfx
+    if is_sfx:
+        search_dirs = [AUDIO_SFX_DIR, LEGACY_SFX_DIR, AUDIO_BGM_DIR, LEGACY_MUSIC_DIR]
+    else:
+        search_dirs = [AUDIO_BGM_DIR, LEGACY_MUSIC_DIR, AUDIO_SFX_DIR, LEGACY_SFX_DIR]
+
+    for s_dir in search_dirs:
+        if not s_dir.exists():
+            continue
+        # Exact stem or filename match
+        for f in s_dir.glob("**/*"):
+            if f.is_file() and (f.name.lower() == name_or_path.lower() or f.stem.lower() == stem):
+                return f.resolve()
+        # Partial match
+        matches = list(s_dir.glob(f"**/*{stem}*"))
+        for m in matches:
+            if m.is_file() and m.suffix.lower() in [".mp3", ".wav", ".ogg", ".aac", ".m4a", ".flac"]:
+                return m.resolve()
+                
     return None
+
+
+def list_audio_items(kind="all", category=None):
+    """
+    Return filtered list of audio items from manifest or disk.
+    kind: 'music', 'sfx', or 'all'
+    category: optional filter like 'transitions', 'foley_ui', 'travel_upbeat', etc.
+    """
+    manifest = get_audio_manifest()
+    results = []
+
+    if kind in ["music", "all"]:
+        for item in manifest.get("bg_music", []):
+            if not category or category.lower() in item.get("category", "").lower():
+                entry = dict(item)
+                entry["type"] = "music"
+                results.append(entry)
+
+    if kind in ["sfx", "all"]:
+        for item in manifest.get("sfx", []):
+            if not category or category.lower() in item.get("category", "").lower():
+                entry = dict(item)
+                entry["type"] = "sfx"
+                results.append(entry)
+
+    return results
 
 
 def build_audio_filter(total_duration, music_volume=1.0, sfx_volume=0.20, target_lufs=-16):

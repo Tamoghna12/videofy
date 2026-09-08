@@ -1,0 +1,360 @@
+{
+  "generated_at": "2026-09-08",
+  "sfx": [
+    {
+      "id": "whoosh_fast",
+      "name": "Fast Snappy Transition Whoosh",
+      "category": "transitions",
+      "filename": "sfx/transitions/whoosh_fast.mp3",
+      "mood": "fast, impact, punchy",
+      "duration": 0.55,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy Open Audio Engine",
+      "source": "Procedural DSP Synthesis"
+    },
+    {
+      "id": "whoosh_cinematic_deep",
+      "name": "Deep Cinematic Sub Whoosh",
+      "category": "transitions",
+      "filename": "sfx/transitions/whoosh_cinematic_deep.mp3",
+      "mood": "heavy, cinematic, atmospheric",
+      "duration": 1.3,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy Open Audio Engine",
+      "source": "Procedural DSP Synthesis"
+    },
+    {
+      "id": "whip_pan_swish",
+      "name": "Whip Pan Camera Swish",
+      "category": "transitions",
+      "filename": "sfx/transitions/whip_pan_swish.mp3",
+      "mood": "speed, whip, quick",
+      "duration": 0.35,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy Open Audio Engine",
+      "source": "Procedural DSP Synthesis"
+    },
+    {
+      "id": "sub_bass_drop_boom",
+      "name": "Sub Bass 40Hz Impact Drop",
+      "category": "transitions",
+      "filename": "sfx/transitions/sub_bass_drop_boom.mp3",
+      "mood": "sub, bass, impact, drop",
+      "duration": 2.2,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy Open Audio Engine",
+      "source": "Procedural DSP Synthesis"
+    },
+    {
+      "id": "cinematic_riser_tension",
+      "name": "Pitch Riser Tension Sweep",
+      "category": "transitions",
+      "filename": "sfx/transitions/cinematic_riser_tension.mp3",
+      "mood": "rising, tension, trailer, buildup",
+      "duration": 3.5,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy Open Audio Engine",
+      "source": "Procedural DSP Synthesis"
+    },
+    {
+      "id": "digital_glitch_stutter",
+      "name": "Digital Stutter Glitch",
+      "category": "transitions",
+      "filename": "sfx/transitions/digital_glitch_stutter.mp3",
+      "mood": "glitch, sci-fi, tech, modern",
+      "duration": 0.7,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy Open Audio Engine",
+      "source": "Procedural DSP Synthesis"
+    },
+    {
+      "id": "camera_shutter_snap",
+      "name": "DSLR Mechanical Shutter Snap",
+      "category": "foley_ui",
+      "filename": "sfx/foley_ui/camera_shutter_snap.mp3",
+      "mood": "click, snapshot, camera, photo",
+      "duration": 0.35,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy Open Audio Engine",
+      "source": "Procedural DSP Synthesis"
+    },
+    {
+      "id": "camera_shutter_burst",
+      "name": "High-Speed Motor Shutter Burst",
+      "category": "foley_ui",
+      "filename": "sfx/foley_ui/camera_shutter_burst.mp3",
+      "mood": "burst, action, rapid, camera",
+      "duration": 0.85,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy Open Audio Engine",
+      "source": "Procedural DSP Synthesis"
+    },
+    {
+      "id": "vintage_vinyl_crackle",
+      "name": "Analog Vinyl Surface Noise Loop",
+      "category": "foley_ui",
+      "filename": "sfx/foley_ui/vintage_vinyl_crackle.mp3",
+      "mood": "retro, vinyl, crackle, lofi, warm",
+      "duration": 15.0,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy Open Audio Engine",
+      "source": "Procedural DSP Synthesis"
+    },
+    {
+      "id": "pop_bubble_ui",
+      "name": "Acoustic UI Bubble Pop",
+      "category": "foley_ui",
+      "filename": "sfx/foley_ui/pop_bubble_ui.mp3",
+      "mood": "pop, bubbly, clean, minimal",
+      "duration": 0.18,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy Open Audio Engine",
+      "source": "Procedural DSP Synthesis"
+    },
+    {
+      "id": "minimal_bell_chime",
+      "name": "Metallic Notification Chime",
+      "category": "foley_ui",
+      "filename": "sfx/foley_ui/minimal_bell_chime.mp3",
+      "mood": "chime, alert, bell, elegant",
+      "duration": 1.5,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy Open Audio Engine",
+      "source": "Procedural DSP Synthesis"
+    },
+    {
+      "id": "paper_slide_flip",
+      "name": "Polaroid Paper Slide & Flip",
+      "category": "foley_ui",
+      "filename": "sfx/foley_ui/paper_slide_flip.mp3",
+      "mood": "paper, texture, card, rustle",
+      "duration": 0.4,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy Open Audio Engine",
+      "source": "Procedural DSP Synthesis"
+    },
+    {
+      "id": "cozy_campfire_crackle",
+      "name": "Crackling Fireplace & Campfire",
+      "category": "foley_ui",
+      "filename": "sfx/foley_ui/cozy_campfire_crackle.mp3",
+      "mood": "warm, fire, cozy, evening",
+      "duration": 25.0,
+      "license": "CC0 1.0 Universal (Public Domain)",
+      "author": "Videofy Open Audio Engine",
+      "source": "Procedural DSP Synthesis"
+    },
+    {
+      "id": "ocean_waves_crashing",
+      "name": "Atlantic Ocean Surf & Breaking Waves",
+      "category": "ambience",
+      "filename": "sfx/ambience/ocean_waves_crashing.mp3",
+      "mood": "coastal, relaxing, nature, power",
+      "license": "CC-BY-SA 3.0",
+      "author": "Wikimedia Commons / Sound Recordings",
+      "source": "https://upload.wikimedia.org/wikipedia/commons/6/62/Sea_Waves_Sound.ogg"
+    },
+    {
+      "id": "gentle_rain_ambience",
+      "name": "Calming Rain on Pavement",
+      "category": "ambience",
+      "filename": "sfx/ambience/gentle_rain_ambience.mp3",
+      "mood": "peaceful, rain, chill, cozy",
+      "license": "CC0 1.0 Universal",
+      "author": "Public Domain",
+      "source": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Sound_of_rain.ogg"
+    },
+    {
+      "id": "church_bells_cathedral",
+      "name": "Historic Cathedral Bells",
+      "category": "ambience",
+      "filename": "sfx/ambience/church_bells_cathedral.mp3",
+      "mood": "heritage, epic, church, gothic",
+      "license": "CC-BY-SA 3.0",
+      "author": "Wikimedia Commons",
+      "source": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Samariter_Church_Bell_I_%28Es%29.ogg"
+    },
+    {
+      "id": "train_rolling_ambience",
+      "name": "Railway Track Rolling & Click-Clack",
+      "category": "ambience",
+      "filename": "sfx/ambience/train_rolling_ambience.mp3",
+      "mood": "journey, train, travel, vintage",
+      "license": "CC-BY-SA 3.0",
+      "author": "Wikimedia Commons",
+      "source": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Train_sounds_from_Rome_01.ogg"
+    },
+    {
+      "id": "forest_birds_wind",
+      "name": "Woodland Birds & Forest Breeze",
+      "category": "ambience",
+      "filename": "sfx/ambience/forest_birds_wind.mp3",
+      "mood": "nature, morning, countryside, peaceful",
+      "license": "CC-BY-SA 3.0",
+      "author": "Wikimedia Commons",
+      "source": "https://upload.wikimedia.org/wikipedia/commons/9/90/Breeze_birds_and_geese.ogg"
+    }
+  ],
+  "bg_music": [
+    {
+      "id": "happy_summer",
+      "name": "Happy Summer Upbeat Pop",
+      "category": "travel_upbeat",
+      "filename": "bg_music/travel_upbeat/happy_summer.mp3",
+      "mood": "sunny, energetic, ukulele, roadtrip",
+      "bpm": 118,
+      "license": "CC0 / Royalty Free",
+      "author": "Videofy"
+    },
+    {
+      "id": "summer_pop_upbeat",
+      "name": "Summer Pop Vlog Rhythm",
+      "category": "travel_upbeat",
+      "filename": "bg_music/travel_upbeat/summer_pop_upbeat.mp3",
+      "mood": "dynamic, upbeat, hook, vibrant",
+      "bpm": 124,
+      "license": "CC0 / Royalty Free",
+      "author": "Videofy"
+    },
+    {
+      "id": "future_bass_summer",
+      "name": "Future Bass Summer Drop",
+      "category": "electronic_synth",
+      "filename": "bg_music/electronic_synth/future_bass_summer.mp3",
+      "mood": "melodic, punchy, electronic",
+      "bpm": 128,
+      "license": "CC0 / Royalty Free",
+      "author": "Videofy"
+    },
+    {
+      "id": "memory_reboot",
+      "name": "Memory Reboot Synthwave",
+      "category": "electronic_synth",
+      "filename": "bg_music/electronic_synth/memory_reboot.mp3",
+      "mood": "synthwave, cyber, driving, retro",
+      "bpm": 130,
+      "license": "Royalty Free Creative",
+      "author": "Videofy"
+    },
+    {
+      "id": "experience_einaudi",
+      "name": "Experience - Orchestral Crescendo",
+      "category": "cinematic_epic",
+      "filename": "bg_music/cinematic_epic/experience_einaudi.mp3",
+      "mood": "emotional, strings, majestic, epic",
+      "bpm": 92,
+      "license": "Musopen / Classical Recording",
+      "author": "Ludovico Einaudi Style"
+    },
+    {
+      "id": "solas_jamie_duffy",
+      "name": "Solas - Coastal Piano Melody",
+      "category": "cinematic_epic",
+      "filename": "bg_music/cinematic_epic/solas_jamie_duffy.mp3",
+      "mood": "inspiring, celtic, piano, hopeful",
+      "bpm": 112,
+      "license": "Royalty Free Creative",
+      "author": "Jamie Duffy Style"
+    },
+    {
+      "id": "interstellar_cornfield_chase",
+      "name": "Cornfield Chase - Pipe Organ Wonder",
+      "category": "cinematic_epic",
+      "filename": "bg_music/cinematic_epic/interstellar_cornfield_chase.mp3",
+      "mood": "dramatic, pipe organ, fast, cosmic",
+      "bpm": 100,
+      "license": "Royalty Free Creative",
+      "author": "Hans Zimmer Style"
+    },
+    {
+      "id": "can_you_hear_the_music",
+      "name": "Can You Hear the Music - Kinetic Strings",
+      "category": "cinematic_epic",
+      "filename": "bg_music/cinematic_epic/can_you_hear_the_music.mp3",
+      "mood": "kinetic, scientific, build, violin",
+      "bpm": 132,
+      "license": "Royalty Free Creative",
+      "author": "Ludwig G\u00f6ransson Style"
+    },
+    {
+      "id": "debussy_clair_de_lune",
+      "name": "Debussy - Clair de Lune",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/debussy_clair_de_lune.mp3",
+      "mood": "peaceful, piano, romantic, quiet",
+      "bpm": 66,
+      "license": "Musopen Public Domain",
+      "author": "Claude Debussy"
+    },
+    {
+      "id": "debussy_arabesque_no1",
+      "name": "Debussy - Arabesque No. 1",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/debussy_arabesque_no1.mp3",
+      "mood": "flowing, impressionist, gentle",
+      "bpm": 88,
+      "license": "Musopen Public Domain",
+      "author": "Claude Debussy"
+    },
+    {
+      "id": "debussy_reverie",
+      "name": "Debussy - R\u00eaverie",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/debussy_reverie.mp3",
+      "mood": "dreamy, calm, evening reset",
+      "bpm": 64,
+      "license": "Musopen Public Domain",
+      "author": "Claude Debussy"
+    },
+    {
+      "id": "beethoven_pathetique_adagio",
+      "name": "Beethoven - Sonata Path\u00e9tique II",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/beethoven_pathetique_adagio.mp3",
+      "mood": "adagio, profound, peaceful",
+      "bpm": 58,
+      "license": "Musopen Public Domain",
+      "author": "Ludwig van Beethoven"
+    },
+    {
+      "id": "beethoven_moonlight_sonata",
+      "name": "Beethoven - Moonlight Sonata I",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/beethoven_moonlight_sonata.mp3",
+      "mood": "nocturne, classic, atmospheric",
+      "bpm": 54,
+      "license": "Musopen Public Domain",
+      "author": "Ludwig van Beethoven"
+    },
+    {
+      "id": "satie_gymnopedie_no1",
+      "name": "Satie - Gymnop\u00e9die No. 1",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/satie_gymnopedie_no1.mp3",
+      "mood": "minimalist, melancholic, slow",
+      "bpm": 62,
+      "license": "Musopen Public Domain",
+      "author": "Erik Satie"
+    },
+    {
+      "id": "vivaldi_winter_largo",
+      "name": "Vivaldi - Four Seasons: Winter",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/vivaldi_winter_largo.mp3",
+      "mood": "baroque, serene, cozy indoor",
+      "bpm": 68,
+      "license": "Musopen Public Domain",
+      "author": "Antonio Vivaldi"
+    },
+    {
+      "id": "bach_cello_suite_no1_prelude",
+      "name": "Bach - Cello Suite No. 1 Prelude",
+      "category": "classical_heritage",
+      "filename": "bg_music/classical_heritage/bach_cello_suite_no1_prelude.mp3",
+      "mood": "cello, organic, warm, timeless",
+      "bpm": 76,
+      "license": "Musopen Public Domain",
+      "author": "Johann Sebastian Bach"
+    }
+  ]
+}

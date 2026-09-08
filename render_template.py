@@ -63,6 +63,36 @@ def print_system_info():
     print("=" * 70 + "\n")
 
 
+def print_music(category=None):
+    from video_templates.core.audio import list_audio_items
+    items = list_audio_items(kind="music", category=category)
+    cat_str = f" [Category: {category}]" if category else ""
+    print(f"\n🎵 Videofy Open-Source Music Catalog{cat_str} ({len(items)} tracks):")
+    print("=" * 90)
+    print(f"  {'ID / Track Name':<28} | {'Category':<18} | {'BPM':<5} | {'License':<15} | {'Mood / Description'}")
+    print("-" * 90)
+    for item in items:
+        bpm = str(item.get("bpm", "--"))
+        print(f"  {item['id']:<28} | {item.get('category', ''):<18} | {bpm:<5} | {item.get('license', 'CC'):<15} | {item.get('mood', '')}")
+    print("=" * 90)
+    print("  👉 Usage in render:  --music <id> (e.g. --music happy_summer or --music experience_einaudi)\n")
+
+
+def print_sfx(category=None):
+    from video_templates.core.audio import list_audio_items
+    items = list_audio_items(kind="sfx", category=category)
+    cat_str = f" [Category: {category}]" if category else ""
+    print(f"\n💥 Videofy Open-Source SFX & Ambience Library{cat_str} ({len(items)} items):")
+    print("=" * 90)
+    print(f"  {'ID / Sound Name':<28} | {'Category':<14} | {'Dur':<6} | {'License':<15} | {'Mood / Description'}")
+    print("-" * 90)
+    for item in items:
+        dur = f"{item.get('duration', 0.0):.1f}s" if item.get('duration') else "--"
+        print(f"  {item['id']:<28} | {item.get('category', ''):<14} | {dur:<6} | {item.get('license', 'CC0')[:15]:<15} | {item.get('mood', '')}")
+    print("=" * 90)
+    print("  👉 Usage in render:  --sfx <id> (e.g. --sfx whoosh_fast or --sfx ocean_waves_crashing)\n")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Videofy Engine CLI - Render high-impact videos with standard templates."
@@ -105,6 +135,12 @@ def main():
     # Informational utilities
     parser.add_argument("--list-presets", action="store_true", help="List all available presets and exit")
     parser.add_argument("--list-luts", action="store_true", help="List available 3D LUTs and exit")
+    parser.add_argument("--list-music", nargs="?", const="", default=None,
+                        help="List available open-source music tracks (optional category filter, e.g. cinematic_epic, travel_upbeat)")
+    parser.add_argument("--list-sfx", nargs="?", const="", default=None,
+                        help="List available open-source SFX items (optional category filter, e.g. transitions, foley_ui, ambience)")
+    parser.add_argument("--download-audio", action="store_true",
+                        help="Download & synthesize the complete open-source music and SFX library")
     parser.add_argument("--info", action="store_true", help="Display system hardware acceleration details and exit")
 
     args = parser.parse_args()
@@ -121,8 +157,22 @@ def main():
         print_luts()
         return
 
+    if args.list_music is not None:
+        print_music(category=args.list_music if args.list_music else None)
+        return
+
+    if args.list_sfx is not None:
+        print_sfx(category=args.list_sfx if args.list_sfx else None)
+        return
+
+    if args.download_audio:
+        import subprocess
+        print("\n🚀 Executing Automated Open-Source Audio Library Builder...")
+        subprocess.run([sys.executable, str(WORKSPACE_ROOT / "download_audio_library.py")], check=True)
+        return
+
     if not args.footage:
-        parser.error("The --footage argument is required unless using --list-presets, --list-luts, or --info.")
+        parser.error("The --footage argument is required unless using --list-presets, --list-luts, --list-music, --list-sfx, --download-audio, or --info.")
 
     footage_path = Path(args.footage).resolve()
     if not footage_path.exists():

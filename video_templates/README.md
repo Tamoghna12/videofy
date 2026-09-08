@@ -19,7 +19,11 @@ python3 render_template.py --list-presets
 # 2. List available 3D LUTs (250+ film & creative LUTs)
 python3 render_template.py --list-luts
 
-# 3. Render an Instagram Catchy Reel (9:16 Portrait)
+# 3. List open-source background music tracks & sound effects
+python3 render_template.py --list-music
+python3 render_template.py --list-sfx
+
+# 4. Render an Instagram Catchy Reel (9:16 Portrait)
 python3 render_template.py \
   --preset insta_catchy_reel \
   --footage "raw_footage/Northern Ireland/dunluce_castle" \
@@ -114,12 +118,14 @@ Over 250 industry-standard 3D `.cube` LUTs are indexed under `assets/luts/`:
 
 ---
 
-## 🎧 Audio Engineering Standards
-
+## 🎧 Audio Engineering & Open-Source Library
+ 
 All presets enforce strict broadcast standards:
 - **EBU R128 Loudness**: Normalized to **-16.0 LUFS** (social media target) with a **-1.0 dBFS true peak ceiling**.
 - **Multi-Track Mixing**: Background music automatically ducks under ambient field audio / waves / wind.
 - **Mastering**: Clean 1.5s audio fade-ins and exponential fade-outs to eliminate clipping.
+- **Transparent Audio Suite**: 18 studio-grade SFX (`transitions`, `foley_ui`, `ambience`) and 16 curated BGM tracks cataloged in `assets/audio/manifest.json`.
+- **Procedural DSP Synthesis**: 100% public domain CC0 transition whooshes, risers, sub-bass drops, camera shutters, and vinyl crackle generated via `download_audio_library.py`.
 
 ---
 
