@@ -129,6 +129,30 @@ All presets enforce strict broadcast standards:
 
 ---
 
+## 🎙️ AI Cloned Voiceover & Kinetic Highlighted Subtitles
+
+Videofy integrates local, offline zero-shot cloned voiceover synthesis using **Qwen3-TTS 0.6B Base** on NVIDIA GPU:
+- **Spaced Contemplative Pacing**: Divides narration into spaced emotional phrases across the timeline (`--voiceover "Phrase 1 | Phrase 2 | Phrase 3"`), delivering an unhurried cadence (`--voiceover-speed 0.92`).
+- **Dynamic Multi-Interval Sidechain Ducking**: Background music automatically dips to 20% during each spoken phrase and dynamically swells back to 100% during gaps, allowing emotional soundtrack progressions to breathe.
+- **Kinetic Karaoke Subtitle Highlighting**: Uses `faster_whisper` to extract exact word timings and renders real-time highlighted ASS subtitles where the active spoken word glows in radiant gold (`#FFD700`) while surrounding words stay in soft silver.
+
+```bash
+python3 render_template.py \
+  --preset insta_catchy_reel \
+  --footage "raw_footage/york/day1_part1" \
+  --title "YORK IN THE RAIN" \
+  --subtitle "A Journey Through Time" \
+  --voiceover "Two hundred and fifty years... to carve these stones. | Walking the Shambles in the quiet afternoon rain. | Some places don't belong to the past. They're just waiting for you." \
+  --voiceover-speed 0.92 \
+  --music "solas_jamie_duffy" \
+  --sfx "gentle_rain_ambience" \
+  --lut "CINECOLOR_GOLDEN_HOUR.CUBE" \
+  --beat-sync \
+  --output "edit/reels_9x16/york_voiceover_story_reel.mp4"
+```
+
+---
+
 ## 🧩 Adding a New Preset
 
 Adding a new preset takes 3 simple steps:

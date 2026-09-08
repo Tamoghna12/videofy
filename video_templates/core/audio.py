@@ -95,19 +95,47 @@ def build_audio_filter(
     target_lufs=-16,
     has_sfx=True,
     voiceover_duration=None,
-    voiceover_start=1.5
+    voiceover_start=1.5,
+    ducking_intervals=None,
+    voiceover_is_timeline=False
 ):
     """
     Build FFmpeg audio filter complex string for:
-    [1:a] Music track (with automatic ducking when voiceover is active)
+    [1:a] Music track (with automatic dynamic ducking when voiceover is active)
     [2:a] Optional Ambient SFX track
-    [3:a] Optional Voiceover track (delayed and boosted for dialogue clarity)
+    [3:a] Optional Voiceover track (spaced timeline or delayed single-block)
     Outputs: [aout] mastered to target LUFS.
     """
     fade_st = max(0.0, total_duration - 3.5)
     
-    # Check if voiceover is included
-    if voiceover_duration and voiceover_duration > 0:
+    # Check if spaced multi-interval voiceover ducking is requested
+    if ducking_intervals and len(ducking_intervals) > 0:
+        duck_conds = "+".join([f"between(t,{s:.2f},{e:.2f})" for s, e in ducking_intervals])
+        duck_vol = 0.20 * music_volume
+        vol_expr = f"if({duck_conds},{duck_vol:.2f},{music_volume:.2f})"
+        
+        music_chain = (
+            f"[1:a]atrim=0:{total_duration:.2f},"
+            f"afade=t=in:st=0:d=1.0,afade=t=out:st={fade_st:.2f}:d=3.5,"
+            f"volume=eval=frame:volume='{vol_expr}'[mus];"
+        )
+        
+        vox_idx = 3 if has_sfx else 2
+        if voiceover_is_timeline:
+            vox_chain = f"[{vox_idx}:a]atrim=0:{total_duration:.2f},volume=1.35[vox];"
+        else:
+            delay_ms = int(voiceover_start * 1000)
+            vox_chain = f"[{vox_idx}:a]adelay={delay_ms}|{delay_ms},volume=1.35[vox];"
+            
+        if has_sfx:
+            sfx_chain = f"[2:a]aloop=loop=-1:size=2e+09,atrim=0:{total_duration:.2f},volume={sfx_volume},afade=t=in:st=4:d=2.0[sfx];"
+            mix_chain = "[mus][sfx][vox]amix=inputs=3:duration=first[amixed];"
+            chains = music_chain + sfx_chain + vox_chain + mix_chain
+        else:
+            mix_chain = "[mus][vox]amix=inputs=2:duration=first[amixed];"
+            chains = music_chain + vox_chain + mix_chain
+
+    elif voiceover_duration and voiceover_duration > 0:
         d_in = max(0.0, voiceover_start - 0.25)
         d_out = min(total_duration, voiceover_start + voiceover_duration + 0.6)
         duck_vol = 0.22 * music_volume
@@ -144,3 +172,4 @@ def build_audio_filter(
 
     norm_chain = f"[amixed]loudnorm=I={target_lufs}:LRA=9:TP=-1.5[aout]"
     return chains + norm_chain
+

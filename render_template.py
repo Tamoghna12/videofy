@@ -135,8 +135,8 @@ def main():
                         help="Narrative script to synthesize in your personal cloned voice (Qwen3-TTS)")
     parser.add_argument("--voiceover-file", type=str, default=None,
                         help="Path to text file containing narrative voiceover script")
-    parser.add_argument("--voiceover-speed", type=float, default=1.15,
-                        help="Voiceover speech tempo multiplier (default: 1.15)")
+    parser.add_argument("--voiceover-speed", type=float, default=0.92,
+                        help="Voiceover speech tempo multiplier (default: 0.92 for contemplative storytelling)")
 
     # Informational utilities
     parser.add_argument("--list-presets", action="store_true", help="List all available presets and exit")

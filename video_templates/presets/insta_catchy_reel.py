@@ -17,7 +17,11 @@ from ..core.audio import resolve_audio, build_audio_filter
 from ..core.qc import generate_contact_sheet
 from ..core.accel import get_encoder_args
 from ..core.beat_sync import detect_beats, snap_timeline_to_beats
-from ..core.voiceover import generate_voiceover, is_voiceover_available
+from ..core.voiceover import (
+    generate_spaced_story_voiceover,
+    generate_voiceover,
+    is_voiceover_available
+)
 from ..mcp_bridge import validate_deliverable
 
 
@@ -176,10 +180,36 @@ def render(
     dur_cmd = ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(raw_master)]
     total_dur = float(subprocess.check_output(dur_cmd).strip())
 
-    # 6. Overlays & Audio Mastering
+    # 6. Voiceover & Kinetic Typography Synthesis
+    vox_data = None
+    if voiceover_text and is_voiceover_available():
+        vox_dir = tmp_dir / "voiceover"
+        vox_speed = voiceover_speed if voiceover_speed != 1.15 else 0.92
+        try:
+            vox_data = generate_spaced_story_voiceover(
+                narration=voiceover_text,
+                total_duration=total_dur,
+                output_dir=vox_dir,
+                speed=vox_speed,
+                font_size=50
+            )
+        except Exception as e:
+            print(f"⚠️ Spaced voiceover synthesis failed, using single-block fallback: {e}")
+            vox_path = tmp_dir / "voiceover.wav"
+            vox_info = generate_voiceover(voiceover_text, output_path=vox_path, speed=vox_speed)
+            vox_data = {
+                "audio_file": vox_info["audio_file"],
+                "subtitles_ass": None,
+                "ducking_intervals": None,
+                "duration": vox_info["duration"]
+            }
+
+    # 7. Overlays & Audio Mastering
+    # Suppress generic shot captions when kinetic voiceover subtitles are active to prevent visual clash
+    display_shot_captions = [] if (vox_data and vox_data.get("subtitles_ass")) else shot_captions
     overlay_vf = build_timeline_overlays(
         total_dur,
-        shot_captions=shot_captions,
+        shot_captions=display_shot_captions,
         intro_title=title,
         intro_subtitle=subtitle,
         outro_title=outro_title,
@@ -188,27 +218,33 @@ def render(
         aspect="9:16"
     )
 
-    # Voiceover synthesis if requested
-    vox_info = None
-    if voiceover_text and is_voiceover_available():
-        vox_path = tmp_dir / "voiceover.wav"
-        vox_info = generate_voiceover(
-            voiceover_text,
-            output_path=vox_path,
-            speed=voiceover_speed
-        )
+    # Burn kinetic ASS highlighted subtitles
+    if vox_data and vox_data.get("subtitles_ass"):
+        ass_path = str(vox_data["subtitles_ass"]).replace("\\", "/").replace(":", "\\:")
+        overlay_vf = f"{overlay_vf},ass='{ass_path}'"
 
     waves_file = resolve_audio(sfx_track, is_sfx=True) or resolve_audio("ocean_waves_crashing.mp3", is_sfx=True)
-    vox_dur = vox_info["duration"] if vox_info else None
-    audio_vf = build_audio_filter(
-        total_dur,
-        music_volume=1.0,
-        sfx_volume=0.20,
-        target_lufs=-16,
-        has_sfx=True,
-        voiceover_duration=vox_dur,
-        voiceover_start=1.5
-    )
+    if vox_data and vox_data.get("ducking_intervals"):
+        audio_vf = build_audio_filter(
+            total_dur,
+            music_volume=1.0,
+            sfx_volume=0.20,
+            target_lufs=-16,
+            has_sfx=True,
+            ducking_intervals=vox_data["ducking_intervals"],
+            voiceover_is_timeline=True
+        )
+    else:
+        vox_dur = vox_data.get("duration") if vox_data else None
+        audio_vf = build_audio_filter(
+            total_dur,
+            music_volume=1.0,
+            sfx_volume=0.20,
+            target_lufs=-16,
+            has_sfx=True,
+            voiceover_duration=vox_dur,
+            voiceover_start=1.5
+        )
 
     # Output encoding with GPU acceleration
     out_enc_args = get_encoder_args(preference=accel, crf=18, is_segment=False)
@@ -219,8 +255,8 @@ def render(
         "-i", str(music_file),
         "-i", str(waves_file),
     ]
-    if vox_info:
-        mux_cmd.extend(["-i", str(vox_info["audio_file"])])
+    if vox_data:
+        mux_cmd.extend(["-i", str(vox_data["audio_file"])])
 
     mux_cmd.extend([
         "-filter_complex", f"[0:v]{overlay_vf}[vout];{audio_vf}",
