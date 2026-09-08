@@ -169,7 +169,7 @@ def render(
             }
 
     # Overlays & Audio Mastering
-    display_shot_captions = [] if (vox_data and vox_data.get("subtitles_ass")) else shot_captions
+    display_shot_captions = shot_captions if black_bars else ([] if (vox_data and vox_data.get("subtitles_ass")) else shot_captions)
     overlay_vf = build_timeline_overlays(
         total_dur,
         shot_captions=display_shot_captions,

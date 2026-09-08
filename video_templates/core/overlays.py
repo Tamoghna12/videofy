@@ -47,15 +47,28 @@ def build_timeline_overlays(
 
         # Top Text: Location / Context representing the video journey
         clean_in_title = clean_text(intro_title)
-        clean_in_sub = clean_text(intro_subtitle)
         if clean_in_title:
             filters.append(
                 f"drawtext=fontfile='{FONT_BOLD}':text='{clean_in_title}':fontsize=32:fontcolor=white:x=(w-text_w)/2:y=72"
             )
-        if clean_in_sub:
-            filters.append(
-                f"drawtext=fontfile='{FONT_REG}':text='{clean_in_sub}':fontsize=19:fontcolor=0xE5A93C:x=(w-text_w)/2:y=122"
-            )
+        if shot_captions and len(shot_captions) > 0:
+            curr_t = 0.0
+            for dur, cap in shot_captions:
+                c_clean = clean_text(cap)
+                c_start = curr_t + 0.3
+                c_end = curr_t + dur - 0.3
+                if c_end > c_start + 0.4:
+                    c_alpha = f"if(between(t,{c_start:.2f},{c_end:.2f}),if(lt(t,{c_start+0.3:.2f}),(t-{c_start:.2f})/0.3,if(gt(t,{c_end-0.3:.2f}),({c_end:.2f}-t)/0.3,1)),0)"
+                    filters.append(
+                        f"drawtext=fontfile='{FONT_REG}':text='{c_clean}':fontsize=19:fontcolor=0xE5A93C:x=(w-text_w)/2:y=122:alpha='{c_alpha}'"
+                    )
+                curr_t += dur
+        else:
+            clean_in_sub = clean_text(intro_subtitle)
+            if clean_in_sub:
+                filters.append(
+                    f"drawtext=fontfile='{FONT_REG}':text='{clean_in_sub}':fontsize=19:fontcolor=0xE5A93C:x=(w-text_w)/2:y=122"
+                )
 
         # 2. Bottom black matte bar (dedicated canvas for kinetic highlighted subtitles)
         filters.append("drawbox=x=0:y=1660:w=1080:h=260:color=black@1.0:t=fill")
@@ -99,15 +112,28 @@ def build_timeline_overlays(
 
         # Top Text: Location / Context representing the video journey
         clean_in_title = clean_text(intro_title)
-        clean_in_sub = clean_text(intro_subtitle)
         if clean_in_title:
             filters.append(
                 f"drawtext=fontfile='{FONT_BOLD}':text='{clean_in_title}':fontsize=28:fontcolor=white:x=(w-text_w)/2:y=38"
             )
-        if clean_in_sub:
-            filters.append(
-                f"drawtext=fontfile='{FONT_REG}':text='{clean_in_sub}':fontsize=17:fontcolor=0xE5A93C:x=(w-text_w)/2:y=76"
-            )
+        if shot_captions and len(shot_captions) > 0:
+            curr_t = 0.0
+            for dur, cap in shot_captions:
+                c_clean = clean_text(cap)
+                c_start = curr_t + 0.3
+                c_end = curr_t + dur - 0.3
+                if c_end > c_start + 0.4:
+                    c_alpha = f"if(between(t,{c_start:.2f},{c_end:.2f}),if(lt(t,{c_start+0.3:.2f}),(t-{c_start:.2f})/0.3,if(gt(t,{c_end-0.3:.2f}),({c_end:.2f}-t)/0.3,1)),0)"
+                    filters.append(
+                        f"drawtext=fontfile='{FONT_REG}':text='{c_clean}':fontsize=17:fontcolor=0xE5A93C:x=(w-text_w)/2:y=76:alpha='{c_alpha}'"
+                    )
+                curr_t += dur
+        else:
+            clean_in_sub = clean_text(intro_subtitle)
+            if clean_in_sub:
+                filters.append(
+                    f"drawtext=fontfile='{FONT_REG}':text='{clean_in_sub}':fontsize=17:fontcolor=0xE5A93C:x=(w-text_w)/2:y=76"
+                )
 
         # 2. Bottom black matte bar (dedicated canvas for kinetic highlighted subtitles)
         filters.append("drawbox=x=0:y=940:w=1920:h=140:color=black@1.0:t=fill")
