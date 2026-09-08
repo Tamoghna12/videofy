@@ -1,7 +1,7 @@
 """
-cinematic_landscape.py - Preset: Cinematic Landscape Showcase (16:9 Widescreen)
-Conforms 4K/1080p clips to 16:9 landscape with film stock LUT emulation,
-orchestral audio mastering, and lower-left typography.
+cinematic_landscape.py - Preset: 16:9 Widescreen Film Emulation
+Applies Kodak 2383 D65 print film emulation, slow Ken Burns push-in,
+cinematic title cards, and orchestral crescendos with GPU acceleration.
 """
 
 import shutil
@@ -12,6 +12,7 @@ from ..core.conformer import conform_clip
 from ..core.grading import get_color_filter
 from ..core.overlays import build_timeline_overlays
 from ..core.audio import resolve_audio, build_audio_filter
+from ..core.accel import get_encoder_args
 from ..core.qc import generate_contact_sheet
 from ..mcp_bridge import validate_deliverable
 
@@ -30,7 +31,10 @@ def render(
     music_track="experience_einaudi.mp3",
     sfx_track="ocean_waves_crashing.mp3",
     max_duration=60.0,
-    video_clip_duration=5.5
+    video_clip_duration=5.5,
+    accel="auto",
+    smart_crop=False,
+    **kwargs
 ):
     footage_dir = Path(footage_dir)
     output_file = Path(output_file)
@@ -57,9 +61,20 @@ def render(
         v_path = vids[v_idx]
         seg_out = tmp_dir / f"seg_{seg_counter:02d}.mp4"
         dur = min(video_clip_duration, max_duration - curr_total)
-        conform_clip(v_path, start=1.5, end=1.5 + dur, out_path=seg_out, target_res="1920x1080", fps=24, color_filter=color_vf, zoom_rate=0.018)
+        conform_clip(
+            v_path,
+            start=1.5,
+            end=1.5 + dur,
+            out_path=seg_out,
+            target_res="1920x1080",
+            fps=24,
+            color_filter=color_vf,
+            zoom_rate=0.018,
+            accel=accel,
+            smart_crop=smart_crop
+        )
         timeline_segments.append(seg_out)
-        shot_captions.append((dur, f"{footage_dir.name.replace('_', ' ').title()} - Scene {seg_counter+1}"))
+        shot_captions.append((dur, f"Scene {seg_counter+1:02d}"))
         curr_total += dur
         v_idx += 1
         seg_counter += 1
@@ -79,7 +94,7 @@ def render(
     dur_cmd = ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(raw_master)]
     total_dur = float(subprocess.check_output(dur_cmd).strip())
 
-    # Overlays & Audio
+    # Overlays & Audio Mastering
     overlay_vf = build_timeline_overlays(
         total_dur,
         shot_captions=shot_captions,
@@ -92,30 +107,31 @@ def render(
     )
 
     music_file = resolve_audio(music_track) or resolve_audio("experience_einaudi.mp3")
-    sfx_file = resolve_audio(sfx_track, is_sfx=True) or resolve_audio("ocean_waves_crashing.mp3", is_sfx=True)
-    audio_vf = build_audio_filter(total_dur, music_volume=1.0, sfx_volume=0.18, target_lufs=-14)
+    waves_file = resolve_audio(sfx_track, is_sfx=True) or resolve_audio("ocean_waves_crashing.mp3", is_sfx=True)
+    audio_vf = build_audio_filter(total_dur, music_volume=0.95, sfx_volume=0.20, target_lufs=-14)
 
+    out_enc_args = get_encoder_args(preference=accel, crf=18, is_segment=False)
     mux_cmd = [
         "ffmpeg", "-y", "-v", "error",
         "-i", str(raw_master),
         "-i", str(music_file),
-        "-i", str(sfx_file),
+        "-i", str(waves_file),
         "-filter_complex", f"[0:v]{overlay_vf}[vout];{audio_vf}",
         "-map", "[vout]", "-map", "[aout]",
-        "-c:v", "libx264", "-preset", "medium", "-crf", "18",
-        "-c:a", "aac", "-b:a", "256k",
-        "-pix_fmt", "yuv420p",
+    ]
+    mux_cmd.extend(out_enc_args)
+    mux_cmd.extend([
+        "-c:a", "aac", "-b:a", "320k",
         "-movflags", "+faststart",
         "-t", f"{total_dur:.2f}",
         str(output_file)
-    ]
+    ])
     subprocess.run(mux_cmd, check=True)
 
     if qc_file:
         generate_contact_sheet(output_file, qc_file, num_frames=12, aspect="16:9")
 
-    shutil.rmtree(tmp_dir)
-
+    shutil.rmtree(tmp_dir, ignore_errors=True)
     qc_res = validate_deliverable(output_file, expected_aspect="16:9")
     return {
         "output_file": str(output_file),

@@ -3,7 +3,8 @@
 render_template.py - Unified Command-Line Interface for Video Template Production.
 
 Enables 1-click batch rendering of high-impact videos (Insta Reels, Cinematic Widescreen,
-Lifestyle Vlogs, Fast TikTok Shorts) across any footage folder.
+Lifestyle Vlogs, Fast TikTok Shorts) with multi-vendor GPU acceleration, AI beat-sync,
+and AI subject auto-framing.
 """
 
 import argparse
@@ -16,11 +17,11 @@ if str(WORKSPACE_ROOT) not in sys.path:
     sys.path.insert(0, str(WORKSPACE_ROOT))
 
 from video_templates.presets import PRESETS
-from video_templates.core.grading import resolve_lut
+from video_templates.core.accel import get_hardware_info
 
 
 PRESET_DESCRIPTIONS = {
-    "insta_catchy_reel": "9:16 Portrait Reel - Live video + Polaroid photo snaps with shutter flashes, gold progress bar, dynamic lower-thirds, and upbeat music.",
+    "insta_catchy_reel": "9:16 Portrait Reel - Live video + Polaroid photo snaps with shutter flashes, gold progress bar, dynamic lower-thirds, upbeat music, and optional AI beat-sync.",
     "cinematic_landscape": "16:9 Widescreen - Film-look color grading (Kodak 2383), cinematic title cards, gentle Ken Burns push-in, and orchestral soundtrack.",
     "lifestyle_vlog": "9:16 Portrait - Warm culinary tone curve, relaxed pacing, subtle captions, and chill lo-fi/piano vibes.",
     "fast_cuts_short": "9:16 Portrait - 15-20s rapid-fire TikTok/Shorts micro-reel, beat drops, fast cuts, and punchy typography.",
@@ -50,10 +51,21 @@ def print_luts():
     print("=" * 70 + "\n")
 
 
+def print_system_info():
+    info = get_hardware_info()
+    print("\n⚡ System & Hardware Acceleration Status:")
+    print("=" * 70)
+    print(f"  Active Encoder     : {info['active_encoder']} ({info['acceleration_type'].upper()})")
+    print("  Available Encoders :")
+    for enc, avail in info['available_encoders'].items():
+        status = "✅ YES" if avail else "❌ NO"
+        print(f"    • {enc:<35} : {status}")
+    print("=" * 70 + "\n")
+
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Unified Video Template Engine CLI - Render high-impact videos with standard templates."
+        description="Videofy Engine CLI - Render high-impact videos with standard templates."
     )
     parser.add_argument("-p", "--preset", choices=list(PRESETS.keys()), default="insta_catchy_reel",
                         help="Video preset to render (default: insta_catchy_reel)")
@@ -82,11 +94,24 @@ def main():
     parser.add_argument("--music", type=str, default=None, help="Background music filename (in bg_music/) or path")
     parser.add_argument("--sfx", type=str, default=None, help="SFX audio filename (in bg_music/) or path")
 
+    # AI & Hardware Acceleration
+    parser.add_argument("--accel", choices=["auto", "nvenc", "qsv", "videotoolbox", "vaapi", "cpu"], default="auto",
+                        help="GPU hardware acceleration encoder (default: auto)")
+    parser.add_argument("--beat-sync", action="store_true",
+                        help="Enable AI musical downbeat synchronization for clip transitions")
+    parser.add_argument("--smart-crop", action="store_true",
+                        help="Enable AI subject/face tracking for dynamic 9:16 auto-framing")
+
     # Informational utilities
     parser.add_argument("--list-presets", action="store_true", help="List all available presets and exit")
     parser.add_argument("--list-luts", action="store_true", help="List available 3D LUTs and exit")
+    parser.add_argument("--info", action="store_true", help="Display system hardware acceleration details and exit")
 
     args = parser.parse_args()
+
+    if args.info:
+        print_system_info()
+        return
 
     if args.list_presets:
         print_presets()
@@ -97,7 +122,7 @@ def main():
         return
 
     if not args.footage:
-        parser.error("The --footage argument is required unless using --list-presets or --list-luts.")
+        parser.error("The --footage argument is required unless using --list-presets, --list-luts, or --info.")
 
     footage_path = Path(args.footage).resolve()
     if not footage_path.exists():
@@ -110,11 +135,8 @@ def main():
         args.output = str(WORKSPACE_ROOT / "edit" / f"{stem}_{args.preset}.mp4")
 
     output_path = Path(args.output).resolve()
-
-    # Determine default QC path if requested or preset default
     qc_path = Path(args.qc).resolve() if args.qc else None
 
-    # Construct kwargs for selected preset
     kwargs = {
         "footage_dir": footage_path,
         "output_file": output_path,
@@ -146,12 +168,25 @@ def main():
     if args.sfx is not None:
         kwargs["sfx_track"] = args.sfx
 
+    # AI & Accel options
+    if args.accel != "auto" or True:
+        kwargs["accel"] = args.accel
+    if args.beat_sync:
+        kwargs["beat_sync"] = True
+    if args.smart_crop:
+        kwargs["smart_crop"] = True
+
     print("\n" + "=" * 70)
-    print(f"🚀 Launching Video Template Engine: [{args.preset}]")
-    print(f"📂 Footage Directory: {footage_path}")
+    print(f"🚀 Launching Videofy Engine: [{args.preset}]")
+    print(f"📂 Footage Directory : {footage_path}")
     print(f"🎯 Output Deliverable: {output_path}")
+    print(f"⚡ Acceleration Mode : {args.accel.upper()}")
+    if args.beat_sync:
+        print("🎵 AI Beat Sync     : ENABLED")
+    if args.smart_crop:
+        print("🎯 AI Smart Crop    : ENABLED")
     if qc_path:
-        print(f"🔍 Visual QC Sheet:   {qc_path}")
+        print(f"🔍 Visual QC Sheet   : {qc_path}")
     print("=" * 70 + "\n")
 
     render_fn = PRESETS[args.preset]

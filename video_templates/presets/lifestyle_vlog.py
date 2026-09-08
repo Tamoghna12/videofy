@@ -1,7 +1,7 @@
 """
-lifestyle_vlog.py - Preset: Slow Travel & Lifestyle Vlog (9:16 Portrait)
-Tailored for dining, cafes, hotel check-ins, and slow-living travel resets.
-Uses culinary warm color grading and soothing piano soundtracks.
+lifestyle_vlog.py - Preset: Warm Lifestyle & Culinary Vlog (9:16 Portrait)
+Calibrated culinary warm tone curve, relaxed pacing, subtle captions,
+and chill lo-fi/piano vibes with GPU hardware acceleration.
 """
 
 import shutil
@@ -12,6 +12,7 @@ from ..core.conformer import conform_clip
 from ..core.grading import get_color_filter
 from ..core.overlays import build_timeline_overlays
 from ..core.audio import resolve_audio, build_audio_filter
+from ..core.accel import get_encoder_args
 from ..core.qc import generate_contact_sheet
 from ..mcp_bridge import validate_deliverable
 
@@ -30,7 +31,10 @@ def render(
     music_track="debussy_clair_de_lune.mp3",
     sfx_track="gentle_wind_breeze.mp3",
     max_duration=45.0,
-    video_clip_duration=4.8
+    video_clip_duration=4.8,
+    accel="auto",
+    smart_crop=False,
+    **kwargs
 ):
     footage_dir = Path(footage_dir)
     output_file = Path(output_file)
@@ -57,9 +61,20 @@ def render(
         v_path = vids[v_idx]
         seg_out = tmp_dir / f"seg_{seg_counter:02d}.mp4"
         dur = min(video_clip_duration, max_duration - curr_total)
-        conform_clip(v_path, start=1.0, end=1.0 + dur, out_path=seg_out, target_res="1080x1920", fps=24, color_filter=color_vf, zoom_rate=0.015)
+        conform_clip(
+            v_path,
+            start=1.0,
+            end=1.0 + dur,
+            out_path=seg_out,
+            target_res="1080x1920",
+            fps=24,
+            color_filter=color_vf,
+            zoom_rate=0.015,
+            accel=accel,
+            smart_crop=smart_crop
+        )
         timeline_segments.append(seg_out)
-        shot_captions.append((dur, f"Moments in {footage_dir.name.replace('_', ' ').title()}"))
+        shot_captions.append((dur, f"Part {seg_counter+1:02d}"))
         curr_total += dur
         v_idx += 1
         seg_counter += 1
@@ -79,7 +94,7 @@ def render(
     dur_cmd = ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(raw_master)]
     total_dur = float(subprocess.check_output(dur_cmd).strip())
 
-    # Overlays & Audio
+    # Overlays & Audio Mastering
     overlay_vf = build_timeline_overlays(
         total_dur,
         shot_captions=shot_captions,
@@ -92,30 +107,31 @@ def render(
     )
 
     music_file = resolve_audio(music_track) or resolve_audio("debussy_clair_de_lune.mp3")
-    sfx_file = resolve_audio(sfx_track, is_sfx=True) or resolve_audio("gentle_wind_breeze.mp3", is_sfx=True)
-    audio_vf = build_audio_filter(total_dur, music_volume=1.0, sfx_volume=0.15, target_lufs=-16)
+    waves_file = resolve_audio(sfx_track, is_sfx=True) or resolve_audio("gentle_wind_breeze.mp3", is_sfx=True)
+    audio_vf = build_audio_filter(total_dur, music_volume=0.95, sfx_volume=0.15, target_lufs=-16)
 
+    out_enc_args = get_encoder_args(preference=accel, crf=18, is_segment=False)
     mux_cmd = [
         "ffmpeg", "-y", "-v", "error",
         "-i", str(raw_master),
         "-i", str(music_file),
-        "-i", str(sfx_file),
+        "-i", str(waves_file),
         "-filter_complex", f"[0:v]{overlay_vf}[vout];{audio_vf}",
         "-map", "[vout]", "-map", "[aout]",
-        "-c:v", "libx264", "-preset", "medium", "-crf", "18",
+    ]
+    mux_cmd.extend(out_enc_args)
+    mux_cmd.extend([
         "-c:a", "aac", "-b:a", "256k",
-        "-pix_fmt", "yuv420p",
         "-movflags", "+faststart",
         "-t", f"{total_dur:.2f}",
         str(output_file)
-    ]
+    ])
     subprocess.run(mux_cmd, check=True)
 
     if qc_file:
         generate_contact_sheet(output_file, qc_file, num_frames=12, aspect="9:16")
 
-    shutil.rmtree(tmp_dir)
-
+    shutil.rmtree(tmp_dir, ignore_errors=True)
     qc_res = validate_deliverable(output_file, expected_aspect="9:16")
     return {
         "output_file": str(output_file),
