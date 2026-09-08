@@ -157,6 +157,13 @@ python3 render_template.py \
   --qc "edit/verify/qc_york_voiceover.png"
 ```
 
+### ⚡ Batch Automation Script (`batch_update_all_reels.py`)
+To render or update all active travel reels across Yorkshire and Northern Ireland in one automated batch run:
+```bash
+python3 batch_update_all_reels.py
+```
+This automatically parses footage, synthesizes cloned voiceovers with exact token alignment, computes multi-interval sidechain ducking, applies cinematic letterbox framing, and encodes via NVIDIA NVENC.
+
 ---
 
 ## 🧩 Adding a New Preset
@@ -165,3 +172,4 @@ Adding a new preset takes 3 simple steps:
 1. Create `video_templates/presets/my_new_preset.py` implementing `def render(footage_dir, output_file, ...):`.
 2. Import it in `video_templates/presets/__init__.py` and register it in the `PRESETS` dictionary.
 3. The preset is instantly available on the CLI via `python3 render_template.py --preset my_new_preset`.
+
