@@ -1,0 +1,44 @@
+# Raw footage and rendered video deliverables (Large binary files)
+raw_footage/
+edit/
+*.mp4
+*.MP4
+*.mov
+*.MOV
+*.avi
+*.mkv
+
+# Large overlay video assets (>100MB exceeds GitHub limit)
+assets/overlays/*.mp4
+
+# Temporary render artifacts and caches
+_tmp*
+*.tmp
+*.log
+
+# Secrets & Configuration
+.claude/
+*.local.json
+.env
+.env.*
+
+# Python Cache & Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+build/
+dist/
+*.egg-info/
+
+# IDEs & System
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
