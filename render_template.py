@@ -131,6 +131,12 @@ def main():
                         help="Enable AI musical downbeat synchronization for clip transitions")
     parser.add_argument("--smart-crop", action="store_true",
                         help="Enable AI subject/face tracking for dynamic 9:16 auto-framing")
+    parser.add_argument("--voiceover", type=str, default=None,
+                        help="Narrative script to synthesize in your personal cloned voice (Qwen3-TTS)")
+    parser.add_argument("--voiceover-file", type=str, default=None,
+                        help="Path to text file containing narrative voiceover script")
+    parser.add_argument("--voiceover-speed", type=float, default=1.15,
+                        help="Voiceover speech tempo multiplier (default: 1.15)")
 
     # Informational utilities
     parser.add_argument("--list-presets", action="store_true", help="List all available presets and exit")
@@ -226,6 +232,16 @@ def main():
     if args.smart_crop:
         kwargs["smart_crop"] = True
 
+    # Cloned Voiceover options
+    voiceover_text = args.voiceover
+    if args.voiceover_file:
+        p_vf = Path(args.voiceover_file).resolve()
+        if p_vf.is_file():
+            voiceover_text = p_vf.read_text(encoding="utf-8").strip()
+    if voiceover_text:
+        kwargs["voiceover_text"] = voiceover_text
+        kwargs["voiceover_speed"] = args.voiceover_speed
+
     print("\n" + "=" * 70)
     print(f"🚀 Launching Videofy Engine: [{args.preset}]")
     print(f"📂 Footage Directory : {footage_path}")
@@ -235,6 +251,8 @@ def main():
         print("🎵 AI Beat Sync     : ENABLED")
     if args.smart_crop:
         print("🎯 AI Smart Crop    : ENABLED")
+    if voiceover_text:
+        print(f"🎙️ Cloned Voiceover : ENABLED ({len(voiceover_text)} chars, speed={args.voiceover_speed:.2f}x)")
     if qc_path:
         print(f"🔍 Visual QC Sheet   : {qc_path}")
     print("=" * 70 + "\n")

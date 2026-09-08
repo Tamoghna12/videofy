@@ -29,6 +29,7 @@
 - 📸 **Dynamic Polaroid Motion Graphics**: Generates realistic Polaroid photo cards with auto EXIF orientation correction, dynamic tilt angles, drop shadows, 0.14s white shutter flashes, and ambient blurred background drift.
 - 📊 **Kinetic Overlays & Typography**: Smooth animated gold progress bars, glassmorphism title badges, dynamic lower-third location pills, and outro call-to-action cards.
 - 🎧 **Broadcast Audio Mastering**: Enforces strict **EBU R128** loudness normalization (**-16 LUFS** for reels, **-14 LUFS** for landscape) with automated background music ducking under ambient field audio.
+- 🎙️ **AI Zero-Shot Cloned Voiceover**: Generates personal narrative storytelling on local GPU via Qwen3-TTS using your voice sample, with automated broadcast-grade sidechain music ducking (-15dB).
 - 🔍 **Automated Visual QC**: Generates high-resolution multi-frame visual contact sheets for instant visual inspection.
 
 ---
@@ -128,6 +129,21 @@ python3 render_template.py \
   --grade "culinary_warm" \
   --music "debussy_clair_de_lune.mp3" \
   --output "edit/bradford_lifestyle.mp4"
+
+# Render a Storytelling Reel with AI Cloned Voiceover & Music Ducking
+python3 render_template.py \
+  --preset insta_catchy_reel \
+  --footage "raw_footage/york/day1_part1" \
+  --title "YORK IN THE RAIN" \
+  --subtitle "A Journey Through Time" \
+  --voiceover "They spent two hundred and fifty years building York Minster. Standing under these stones in the afternoon rain, watching the cobblestones glisten, you realize some places don't belong to the past. They're just waiting for you to slow down." \
+  --music "solas_jamie_duffy" \
+  --sfx "gentle_rain_ambience" \
+  --lut "CINECOLOR_GOLDEN_HOUR.CUBE" \
+  --accel auto \
+  --beat-sync \
+  --output "edit/reels_9x16/york_voiceover_story_reel.mp4" \
+  --qc "edit/verify/qc_york_voiceover.png"
 
 # Render a Fast Cuts Short (15–20s rapid-fire TikTok / Shorts micro-reel)
 python3 render_template.py \

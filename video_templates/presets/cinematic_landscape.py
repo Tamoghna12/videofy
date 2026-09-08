@@ -14,6 +14,7 @@ from ..core.overlays import build_timeline_overlays
 from ..core.audio import resolve_audio, build_audio_filter
 from ..core.accel import get_encoder_args
 from ..core.qc import generate_contact_sheet
+from ..core.voiceover import generate_voiceover, is_voiceover_available
 from ..mcp_bridge import validate_deliverable
 
 
@@ -34,6 +35,8 @@ def render(
     video_clip_duration=5.5,
     accel="auto",
     smart_crop=False,
+    voiceover_text=None,
+    voiceover_speed=1.15,
     **kwargs
 ):
     footage_dir = Path(footage_dir)
@@ -108,7 +111,27 @@ def render(
 
     music_file = resolve_audio(music_track) or resolve_audio("experience_einaudi.mp3")
     waves_file = resolve_audio(sfx_track, is_sfx=True) or resolve_audio("ocean_waves_crashing.mp3", is_sfx=True)
-    audio_vf = build_audio_filter(total_dur, music_volume=0.95, sfx_volume=0.20, target_lufs=-14)
+    
+    # Voiceover synthesis if requested
+    vox_info = None
+    if voiceover_text and is_voiceover_available():
+        vox_path = tmp_dir / "voiceover.wav"
+        vox_info = generate_voiceover(
+            voiceover_text,
+            output_path=vox_path,
+            speed=voiceover_speed
+        )
+
+    vox_dur = vox_info["duration"] if vox_info else None
+    audio_vf = build_audio_filter(
+        total_dur,
+        music_volume=0.95,
+        sfx_volume=0.20,
+        target_lufs=-14,
+        has_sfx=True,
+        voiceover_duration=vox_dur,
+        voiceover_start=1.5
+    )
 
     out_enc_args = get_encoder_args(preference=accel, crf=18, is_segment=False)
     mux_cmd = [
@@ -116,9 +139,14 @@ def render(
         "-i", str(raw_master),
         "-i", str(music_file),
         "-i", str(waves_file),
+    ]
+    if vox_info:
+        mux_cmd.extend(["-i", str(vox_info["audio_file"])])
+
+    mux_cmd.extend([
         "-filter_complex", f"[0:v]{overlay_vf}[vout];{audio_vf}",
         "-map", "[vout]", "-map", "[aout]",
-    ]
+    ])
     mux_cmd.extend(out_enc_args)
     mux_cmd.extend([
         "-c:a", "aac", "-b:a", "320k",

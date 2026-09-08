@@ -17,6 +17,7 @@ from ..core.audio import resolve_audio, build_audio_filter
 from ..core.qc import generate_contact_sheet
 from ..core.accel import get_encoder_args
 from ..core.beat_sync import detect_beats, snap_timeline_to_beats
+from ..core.voiceover import generate_voiceover, is_voiceover_available
 from ..mcp_bridge import validate_deliverable
 
 
@@ -38,7 +39,10 @@ def render(
     photo_card_duration=2.4,
     accel="auto",
     beat_sync=False,
-    smart_crop=False
+    smart_crop=False,
+    voiceover_text=None,
+    voiceover_speed=1.15,
+    **kwargs
 ):
     footage_dir = Path(footage_dir)
     output_file = Path(output_file)
@@ -184,8 +188,27 @@ def render(
         aspect="9:16"
     )
 
+    # Voiceover synthesis if requested
+    vox_info = None
+    if voiceover_text and is_voiceover_available():
+        vox_path = tmp_dir / "voiceover.wav"
+        vox_info = generate_voiceover(
+            voiceover_text,
+            output_path=vox_path,
+            speed=voiceover_speed
+        )
+
     waves_file = resolve_audio(sfx_track, is_sfx=True) or resolve_audio("ocean_waves_crashing.mp3", is_sfx=True)
-    audio_vf = build_audio_filter(total_dur, music_volume=1.0, sfx_volume=0.20, target_lufs=-16)
+    vox_dur = vox_info["duration"] if vox_info else None
+    audio_vf = build_audio_filter(
+        total_dur,
+        music_volume=1.0,
+        sfx_volume=0.20,
+        target_lufs=-16,
+        has_sfx=True,
+        voiceover_duration=vox_dur,
+        voiceover_start=1.5
+    )
 
     # Output encoding with GPU acceleration
     out_enc_args = get_encoder_args(preference=accel, crf=18, is_segment=False)
@@ -195,9 +218,14 @@ def render(
         "-i", str(raw_master),
         "-i", str(music_file),
         "-i", str(waves_file),
+    ]
+    if vox_info:
+        mux_cmd.extend(["-i", str(vox_info["audio_file"])])
+
+    mux_cmd.extend([
         "-filter_complex", f"[0:v]{overlay_vf}[vout];{audio_vf}",
         "-map", "[vout]", "-map", "[aout]",
-    ]
+    ])
     mux_cmd.extend(out_enc_args)
     mux_cmd.extend([
         "-c:a", "aac", "-b:a", "256k",
