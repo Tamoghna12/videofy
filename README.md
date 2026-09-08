@@ -231,42 +231,48 @@ Sorted by mood and tempo with BPM metadata:
 
 ---
 
-## 🏗️ Architecture & Modules
+## 🏗️ Step-by-Step Architecture & Production Hierarchy
+
+Videofy organizes the video editing lifecycle into an intuitive 4-step production hierarchy:
 
 ```
 videofy/
-├── render_template.py        # Unified CLI command runner (--list-music, --list-sfx, etc.)
-├── download_audio_library.py # Automated procedural audio & SFX synthesizer
-├── requirements.txt          # Python dependencies (Pillow, numpy, scipy, librosa, opencv)
-├── CONTRIBUTING.md           # Contributor guide and preset development manual
-├── README.md                 # Project documentation
-├── .github/workflows/ci.yml  # GitHub Actions automated CI testing workflow
-├── docs/images/              # Embedded sample contact sheets and demo visuals
-├── video_templates/          # Core templating engine package
-│   ├── __init__.py           # Package exports & version
-│   ├── mcp_bridge.py         # MCP tool connectors (kinocut/claudeclip) & stream validation
-│   ├── core/
-│   │   ├── accel.py          # Multi-vendor GPU hardware acceleration (NVENC, QSV, VideoToolbox, VAAPI)
-│   │   ├── beat_sync.py      # AI musical downbeat & transient detection
-│   │   ├── smart_crop.py     # AI subject & face tracking for 16:9 -> 9:16 reframing
-│   │   ├── conformer.py      # Video conforming, aspect-ratio smart crop & Ken Burns drift
-│   │   ├── polaroids.py      # Polaroid generation with EXIF transpose & motion cards
-│   │   ├── grading.py        # Universal 3D LUT resolver + calibrated tone curves
-│   │   ├── overlays.py       # Kinetic typography, progress bars, lower-thirds & outro CTAs
-│   │   ├── audio.py          # EBU R128 mastering, library resolver & multi-track ducking
-│   │   └── qc.py             # Multi-frame visual contact sheet generator
-│   └── presets/
-│       ├── insta_catchy_reel.py   # 9:16 Catchy Instagram reel preset
-│       ├── cinematic_landscape.py # 16:9 Cinematic widescreen preset
-│       ├── lifestyle_vlog.py      # 9:16 Cozy lifestyle vlog preset
-│       └── fast_cuts_short.py     # 9:16 Fast cuts TikTok/Shorts preset
-├── assets/
-│   ├── luts/                 # 250+ curated 3D .cube LUT profiles
-│   └── audio/                # Transparent Open-Source Audio Suite
-│       ├── manifest.json     # Machine-readable catalog & licenses
-│       ├── AUDIO_LICENSES.md # Comprehensive legal attribution guide
-│       ├── sfx/              # transitions/, foley_ui/, ambience/
-│       └── bg_music/         # travel_upbeat/, cinematic_epic/, electronic_synth/, classical_heritage/
+│
+├── 01_raw_footage/ -> raw_footage/          # [STEP 1: INGESTION]
+│   ├── bradford/                            # 4K Yorkshire city footage
+│   ├── Northern Ireland/                    # Causeway Coast, Dunluce Castle, Castlerock
+│   ├── scarboro/                            # Scarborough South Bay
+│   ├── whitby/                              # Whitby Abbey & Coastal Harbor
+│   ├── york/                                # Day 1 Parts 1 & 2
+│   └── incoming_archive/                    # Raw incoming camera clips (2026*.mp4)
+│
+├── 02_assets/ -> assets/                    # [STEP 2: CREATIVE ASSETS]
+│   ├── audio/                               # Open-Source Audio Suite
+│   │   ├── manifest.json                    # Machine-readable metadata, BPM & licenses
+│   │   ├── AUDIO_LICENSES.md                # Full legal attribution guide
+│   │   ├── sfx/                             # 18 Studio-grade SFX (transitions, foley_ui, ambience)
+│   │   └── bg_music/                        # 16 Curated tracks (travel, epic, synth, classic)
+│   ├── luts/                                # 250+ Curated 3D .cube LUT profiles
+│   └── photos/                              # Photography assets (Whitby, York, Scarboro)
+│
+├── 03_engine/ -> video_templates/           # [STEP 3: PRODUCTION ENGINE]
+│   ├── render_template.py                   # Unified CLI runner (--list-music, --list-sfx, etc.)
+│   ├── download_audio_library.py            # Automated procedural audio & SFX synthesizer
+│   ├── video_templates/                     # Core templating package
+│   │   ├── core/                            # GPU accel, AI beat-sync, smart crop, conformer, audio
+│   │   └── presets/                         # insta_catchy_reel, cinematic_landscape, lifestyle_vlog
+│   └── requirements.txt                     # Dependencies (Pillow, numpy, scipy, librosa, opencv)
+│
+├── 04_deliverables/ -> edit/                # [STEP 4: FINISHED DELIVERABLES & QC]
+│   ├── reels_9x16/                          # Rendered vertical portrait reels (1080x1920)
+│   ├── cinematic_16x9/                      # Rendered widescreen films (1920x1080)
+│   └── verify/                              # Multi-frame visual QC contact sheets
+│
+└── _dump/                                   # [QUARANTINE ARCHIVE - Local Only]
+    ├── legacy_scripts/                      # Deprecated prototype scripts (auto_cut, insta_reel, etc.)
+    ├── temp_render_slices/                  # Temporary intermediate slices & concat lists
+    ├── legacy_cards/                        # Previous test polaroid cards
+    └── legacy_project_files/                # Old project metadata, edl.json & transcripts
 ```
 
 ---

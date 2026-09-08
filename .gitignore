@@ -15,6 +15,15 @@ assets/overlays/*.mp4
 _tmp*
 *.tmp
 *.log
+_dump/
+
+# Local workflow aliases & backward-compatibility symlinks
+/01_raw_footage
+/02_assets
+/03_engine
+/04_deliverables
+/bg_music
+/photos
 
 # Secrets & Configuration
 .claude/
