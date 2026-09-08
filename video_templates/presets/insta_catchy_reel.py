@@ -187,7 +187,7 @@ def render(
         vox_dir = tmp_dir / "voiceover"
         vox_speed = voiceover_speed if voiceover_speed != 1.15 else 0.92
         sub_margin_v = 75 if black_bars else 360
-        sub_font_size = 44 if black_bars else 50
+        sub_font_size = 40 if black_bars else 50
         try:
             vox_data = generate_spaced_story_voiceover(
                 narration=voiceover_text,

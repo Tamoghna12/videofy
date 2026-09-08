@@ -58,9 +58,9 @@ def build_timeline_overlays(
             )
 
         # 2. Bottom black matte bar (dedicated canvas for kinetic highlighted subtitles)
-        filters.append("drawbox=x=0:y=1680:w=1080:h=240:color=black@1.0:t=fill")
+        filters.append("drawbox=x=0:y=1660:w=1080:h=260:color=black@1.0:t=fill")
         # Gold accent hairline at top of bottom frame
-        filters.append("drawbox=x=0:y=1680:w=1080:h=2:color=0xE5A93C@0.85:t=fill")
+        filters.append("drawbox=x=0:y=1660:w=1080:h=2:color=0xE5A93C@0.85:t=fill")
 
         # 3. Outro CTA Card (final 4.0s) centered in visual viewport
         outro_start = max(0.0, total_duration - 4.0)
