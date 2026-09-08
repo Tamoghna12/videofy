@@ -46,6 +46,7 @@ def render(
     smart_crop=False,
     voiceover_text=None,
     voiceover_speed=1.15,
+    black_bars=False,
     **kwargs
 ):
     footage_dir = Path(footage_dir)
@@ -185,13 +186,16 @@ def render(
     if voiceover_text and is_voiceover_available():
         vox_dir = tmp_dir / "voiceover"
         vox_speed = voiceover_speed if voiceover_speed != 1.15 else 0.92
+        sub_margin_v = 75 if black_bars else 360
+        sub_font_size = 44 if black_bars else 50
         try:
             vox_data = generate_spaced_story_voiceover(
                 narration=voiceover_text,
                 total_duration=total_dur,
                 output_dir=vox_dir,
                 speed=vox_speed,
-                font_size=50
+                font_size=sub_font_size,
+                margin_v=sub_margin_v
             )
         except Exception as e:
             print(f"⚠️ Spaced voiceover synthesis failed, using single-block fallback: {e}")
@@ -215,7 +219,8 @@ def render(
         outro_title=outro_title,
         outro_subtitle=outro_subtitle,
         handle=handle,
-        aspect="9:16"
+        aspect="9:16",
+        black_bars=black_bars
     )
 
     # Burn kinetic ASS highlighted subtitles

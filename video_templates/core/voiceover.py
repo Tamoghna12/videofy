@@ -79,7 +79,8 @@ def generate_spaced_story_voiceover(
     output_dir: Path,
     speed: float = 0.92,
     reference_audio: Path = None,
-    font_size: int = 54
+    font_size: int = 50,
+    margin_v: int = 360
 ) -> dict:
     """
     Synthesizes spaced, contemplative storytelling voiceover across the video duration
@@ -144,7 +145,7 @@ for i, phrase in enumerate(req['phrases']):
     out_wav = os.path.join(req['out_dir'], f"phrase_{{i}}.wav")
     service.generate_from_text(phrase, path=out_wav)
     
-    segments, _ = whisper.transcribe(out_wav, word_timestamps=True)
+    segments, _ = whisper.transcribe(out_wav, word_timestamps=True, initial_prompt=phrase)
     words = []
     for seg in segments:
         for w in seg.words:
@@ -153,6 +154,16 @@ for i, phrase in enumerate(req['phrases']):
                 "start": float(w.start),
                 "end": float(w.end)
             }})
+    
+    # Align exact original script words if count matches
+    orig_tokens = phrase.split()
+    if len(words) == len(orig_tokens):
+        for idx in range(len(words)):
+            words[idx]["word"] = orig_tokens[idx]
+    elif abs(len(words) - len(orig_tokens)) <= 2:
+        for idx in range(min(len(words), len(orig_tokens))):
+            if words[idx]["word"].lower() == orig_tokens[idx].lower() or orig_tokens[idx].lower().startswith(words[idx]["word"].lower()[:3]):
+                words[idx]["word"] = orig_tokens[idx]
     
     # Probe duration
     import subprocess
@@ -258,7 +269,7 @@ print("SPACED_SYNTHESIS_SUCCESS")
         "[V4+ Styles]",
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
         # Style: Centered lower-third (Alignment=2), bold white with black outline and drop shadow
-        f"Style: Default, Liberation Sans, {font_size}, &H00FFFFFF, &H000000FF, &H00000000, &H90000000, 1, 0, 0, 0, 100, 100, 1.2, 0, 1, 3.5, 2.0, 2, 80, 80, 360, 1",
+        f"Style: Default, Liberation Sans, {font_size}, &H00FFFFFF, &H000000FF, &H00000000, &H90000000, 1, 0, 0, 0, 100, 100, 1.2, 0, 1, 3.5, 2.0, 2, 80, 80, {margin_v}, 1",
         "",
         "[Events]",
         "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",

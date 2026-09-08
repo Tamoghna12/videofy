@@ -137,6 +137,8 @@ def main():
                         help="Path to text file containing narrative voiceover script")
     parser.add_argument("--voiceover-speed", type=float, default=0.92,
                         help="Voiceover speech tempo multiplier (default: 0.92 for contemplative storytelling)")
+    parser.add_argument("--black-bars", action="store_true",
+                        help="Add top and bottom cinematic black frame bars for clean letterbox text framing")
 
     # Informational utilities
     parser.add_argument("--list-presets", action="store_true", help="List all available presets and exit")
@@ -231,6 +233,8 @@ def main():
         kwargs["beat_sync"] = True
     if args.smart_crop:
         kwargs["smart_crop"] = True
+    if args.black_bars:
+        kwargs["black_bars"] = True
 
     # Cloned Voiceover options
     voiceover_text = args.voiceover

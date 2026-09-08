@@ -129,9 +129,10 @@ All presets enforce strict broadcast standards:
 
 ---
 
-## 🎙️ AI Cloned Voiceover & Kinetic Highlighted Subtitles
+## 🎙️ AI Cloned Voiceover & Cinematic Framed Kinetic Subtitles
 
 Videofy integrates local, offline zero-shot cloned voiceover synthesis using **Qwen3-TTS 0.6B Base** on NVIDIA GPU:
+- **Cinematic Top & Bottom Black Frames (`--black-bars`)**: Frames the video with a 200px top black letterbox bar for clean chapter/location titles and a 240px bottom black canvas for the subtitles, keeping the video completely unobstructed.
 - **Spaced Contemplative Pacing**: Divides narration into spaced emotional phrases across the timeline (`--voiceover "Phrase 1 | Phrase 2 | Phrase 3"`), delivering an unhurried cadence (`--voiceover-speed 0.92`).
 - **Dynamic Multi-Interval Sidechain Ducking**: Background music automatically dips to 20% during each spoken phrase and dynamically swells back to 100% during gaps, allowing emotional soundtrack progressions to breathe.
 - **Kinetic Karaoke Subtitle Highlighting**: Uses `faster_whisper` to extract exact word timings and renders real-time highlighted ASS subtitles where the active spoken word glows in radiant gold (`#FFD700`) while surrounding words stay in soft silver.
@@ -140,15 +141,20 @@ Videofy integrates local, offline zero-shot cloned voiceover synthesis using **Q
 python3 render_template.py \
   --preset insta_catchy_reel \
   --footage "raw_footage/york/day1_part1" \
-  --title "YORK IN THE RAIN" \
-  --subtitle "A Journey Through Time" \
-  --voiceover "Two hundred and fifty years... to carve these stones. | Walking the Shambles in the quiet afternoon rain. | Some places don't belong to the past. They're just waiting for you." \
+  --title "YORK RAILWAY STATION" \
+  --subtitle "ARRIVING BY TRAIN • 1877" \
+  --outro-title "WELCOME TO YORK" \
+  --outro-subtitle "Save this for your next rail journey 📍" \
+  --voiceover "There is something timeless about arriving by train... watching the miles quietly fall away outside the window. | Gliding under the great iron arches of York Station. Built in eighteen seventy-seven, like a cathedral of steam and iron. | You step onto the platform, breathe in the cold northern air... and realize your journey has finally begun." \
   --voiceover-speed 0.92 \
+  --black-bars \
   --music "solas_jamie_duffy" \
   --sfx "gentle_rain_ambience" \
   --lut "CINECOLOR_GOLDEN_HOUR.CUBE" \
+  --accel auto \
   --beat-sync \
-  --output "edit/reels_9x16/york_voiceover_story_reel.mp4"
+  --output "edit/reels_9x16/york_voiceover_story_reel.mp4" \
+  --qc "edit/verify/qc_york_voiceover.png"
 ```
 
 ---
