@@ -1,0 +1,58 @@
+name: "Loughborough Town Walk Part 3: A Taste of Home"
+preset: "cinematic_landscape"
+title: "A TASTE OF HOME"
+subtitle: "PART 3: TWILIGHT & SAINSBURY'S // LOUGHBOROUGH"
+outro_title: "PART 3: A TASTE OF HOME"
+outro_subtitle: "Finding Roots in Everyday Moments • Loughborough 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "raw_footage/lboro_town_walks"
+output_file: "edit/cinematic_16x9/lboro_town_part3_taste_of_home.mp4"
+qc_file: "edit/verify/qc_sheet_town_part3.png"
+
+grade: "interstellar"
+lut: "JD_DLOG_M_CONVERSION_0.CUBE"
+music: "can_you_hear_the_music.mp3"
+sfx: "train_rolling_ambience.mp3"
+black_bars: true
+max_duration: 70.0
+
+shots:
+  - file: "DJI_20251025193748_0117_D.MP4"
+    start: 1.0
+    end: 12.0
+    caption: "TWILIGHT APPROACH // SAINSBURY'S FORECOURT"
+    voiceover: "As deep blue twilight settles over the Midlands, the evening routine begins."
+
+  - file: "DJI_20251025193748_0117_D.MP4"
+    start: 12.0
+    end: 24.0
+    caption: "AUTOMATIC DOORS // STEPPING INSIDE"
+
+  - file: "DJI_20251025193748_0117_D.MP4"
+    start: 24.0
+    end: 38.0
+    caption: "MARKET AISLES // EVENING ESSENTIALS"
+
+  - file: "DJI_20251025193943_0118_D.MP4"
+    start: 0.5
+    end: 5.5
+    caption: "DAIRY SHELF // A TASTE OF HOME"
+    voiceover: "And then, on a quiet grocery shelf, an unexpected reminder of home thousands of miles away."
+
+  - file: "DJI_20251025194634_0121_D.MP4"
+    start: 1.0
+    end: 8.0
+    caption: "SELF-CHECKOUT // SCANNING ITEMS"
+    voiceover: "Unpacking the basket at the self-checkout, surrounded by the evening hum."
+
+  - file: "DJI_20251025194634_0121_D.MP4"
+    start: 8.0
+    end: 14.5
+    caption: "EVENING BASKET // DAILY RHYTHMS"
+
+  - file: "DJI_20251025194657_0122_D.MP4"
+    start: 0.5
+    end: 8.0
+    caption: "CONTACTLESS TAP // SETTLING IN"
+    voiceover: "A simple moment, yet deeply grounding. You are no longer just visiting. You are home."

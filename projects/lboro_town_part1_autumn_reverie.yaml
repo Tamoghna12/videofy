@@ -1,0 +1,68 @@
+name: "Loughborough Town Walk Part 1: Autumn Reverie"
+preset: "cinematic_landscape"
+title: "AUTUMN REVERIE"
+subtitle: "PART 1: THE TOWN WALK // LOUGHBOROUGH EVENING"
+outro_title: "PART 1: AUTUMN REVERIE"
+outro_subtitle: "Echoes in the English Autumn • Loughborough 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "raw_footage/lboro_town_walks"
+output_file: "edit/cinematic_16x9/lboro_town_part1_autumn_reverie.mp4"
+qc_file: "edit/verify/qc_sheet_town_part1.png"
+
+grade: "interstellar"
+lut: "JD_DLOG_M_CONVERSION_0.CUBE"
+music: "interstellar_cornfield_chase.mp3"
+sfx: "church_bells_cathedral.mp3"
+black_bars: true
+max_duration: 85.0
+
+shots:
+  - file: "DJI_20251025184251_0009_D.MP4"
+    start: 1.0
+    end: 9.0
+    caption: "VICTORIAN TERRACES // AUTUMN LEAVES"
+    voiceover: "There is a quiet rhythm to English autumn that words rarely capture."
+
+  - file: "DJI_20251025184251_0009_D.MP4"
+    start: 9.0
+    end: 17.0
+    caption: "RED BRICK SUBURB // GOLDEN BOUGHS"
+
+  - file: "DJI_20251025184803_0010_D.MP4"
+    start: 1.0
+    end: 11.0
+    caption: "TOWN APPROACH // EVENING TRAFFIC"
+    voiceover: "Stepping out as dusk deepens, watching the town stir into evening motion."
+
+  - file: "DJI_20251025184803_0010_D.MP4"
+    start: 11.0
+    end: 22.0
+    caption: "TWILIGHT CORRIDOR // TOWARD TOWN CENTER"
+
+  - file: "DJI_20251025184836_0011_D.MP4"
+    start: 0.2
+    end: 4.0
+    caption: "STREET CROSSING // TRANSITION"
+
+  - file: "DJI_20251025184924_0109_D.MP4"
+    start: 1.0
+    end: 11.0
+    caption: "THE GRIFFIN // PEDESTRIAN GATEWAY"
+    voiceover: "Passing under the golden boughs outside the Griffin, where centuries of footsteps have walked."
+
+  - file: "DJI_20251025184924_0109_D.MP4"
+    start: 11.0
+    end: 22.0
+    caption: "HIGH STREET PLAZA // PAVED CORRIDORS"
+
+  - file: "DJI_20251025185124_0110_D.MP4"
+    start: 1.0
+    end: 11.0
+    caption: "TOWN CENTER // EVENING MOTION"
+    voiceover: "A town alive with quiet ambition, moving forward one evening at a time."
+
+  - file: "DJI_20251025185124_0110_D.MP4"
+    start: 11.0
+    end: 20.0
+    caption: "MARKET PROMENADE // TWILIGHT DRIFT"

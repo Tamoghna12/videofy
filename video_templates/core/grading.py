@@ -22,6 +22,14 @@ PRESET_GRADES = {
     "clean_landscape": "curves=master='0/0.04 0.2/0.30 0.5/0.56 0.8/0.82 1/0.97',eq=contrast=1.03:brightness=0.035:gamma=1.14:saturation=1.10",
     "bright_landscape": "curves=master='0/0.05 0.25/0.38 0.5/0.62 0.75/0.86 1/1',eq=contrast=1.03:brightness=0.06:gamma=1.20:saturation=1.16",
     "moody_contrast": "eq=contrast=1.12:brightness=-0.02:saturation=0.92:gamma=0.98,curves=master='0/0 0.25/0.22 0.75/0.78 1/1'",
+    "interstellar": (
+        "curves=master='0/0.01 0.15/0.13 0.5/0.50 0.85/0.88 1/0.97':"
+        "red='0/0 0.2/0.18 0.5/0.50 0.8/0.83 1/1':"
+        "blue='0/0.03 0.2/0.22 0.5/0.49 0.8/0.78 1/0.94',"
+        "colorbalance=rs=-0.02:gs=0.00:bs=0.03:rm=0.01:gm=0.00:bm=-0.01:rh=0.03:gh=0.01:bh=-0.02,"
+        "eq=contrast=1.10:brightness=0.01:saturation=0.96:gamma=1.02,"
+        "cas=0.25"
+    ),
 }
 
 

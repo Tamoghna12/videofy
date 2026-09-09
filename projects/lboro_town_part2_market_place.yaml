@@ -1,0 +1,64 @@
+name: "Loughborough Town Walk Part 2: Echoes & Evening Lights"
+preset: "cinematic_landscape"
+title: "ECHOES & EVENING LIGHTS"
+subtitle: "PART 2: MARKET PLACE & CHURCH GATE // LOUGHBOROUGH"
+outro_title: "PART 2: ECHOES & EVENING LIGHTS"
+outro_subtitle: "Where History Meets the Evening Pulse • Loughborough 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "raw_footage/lboro_town_walks"
+output_file: "edit/cinematic_16x9/lboro_town_part2_market_place.mp4"
+qc_file: "edit/verify/qc_sheet_town_part2.png"
+
+grade: "interstellar"
+lut: "JD_DLOG_M_CONVERSION_0.CUBE"
+music: "solas_jamie_duffy.mp3"
+sfx: "church_bells_cathedral.mp3"
+black_bars: true
+max_duration: 80.0
+
+shots:
+  - file: "DJI_20251025185358_0111_D.MP4"
+    start: 1.0
+    end: 12.0
+    caption: "TOWN HALL // CLOCK TOWER SQUARE"
+    voiceover: "The historic clock tower of the Town Hall stands as a quiet anchor in the heart of the town."
+
+  - file: "DJI_20251025185358_0111_D.MP4"
+    start: 12.0
+    end: 24.0
+    caption: "MARKET PLACE // TWILIGHT STROLL"
+
+  - file: "DJI_20251025185642_0112_D.MP4"
+    start: 1.0
+    end: 9.0
+    caption: "CHURCH GATE // HISTORIC CORNER"
+    voiceover: "Turning into Church Gate, where cobblestones hold centuries of stories."
+
+  - file: "DJI_20251025185642_0112_D.MP4"
+    start: 9.0
+    end: 16.0
+    caption: "TRADITIONAL STREETSCAPE // TIMELESS HERITAGE"
+
+  - file: "DJI_20251025190658_0113_D.MP4"
+    start: 1.0
+    end: 11.0
+    caption: "WINTER PREPARATION // NUTCRACKER DISPLAY"
+    voiceover: "Stepping inside, greeted by the festive anticipation of winter already taking shape."
+
+  - file: "DJI_20251025190723_0114_D.MP4"
+    start: 1.0
+    end: 11.0
+    caption: "BERRY WREATHS // HOLIDAY SANCTUARY"
+    voiceover: "Rich reds and winter greens, a warm sanctuary from the autumn chill outside."
+
+  - file: "DJI_20251025190723_0114_D.MP4"
+    start: 11.0
+    end: 21.0
+    caption: "SEASONAL WARMTH // FESTIVE TOUCHES"
+
+  - file: "DJI_20251025191911_0116_D.MP4"
+    start: 1.0
+    end: 8.0
+    caption: "ESCALATOR DESCENT // EVENING COMMUNITY"
+    voiceover: "Watching the town prepare for the season ahead, sharing in the quiet warmth of community."
