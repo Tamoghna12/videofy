@@ -101,7 +101,8 @@ def generate_spaced_story_voiceover(
     margin_v: int = 360,
     play_res_x: int = 1080,
     play_res_y: int = 1920,
-    margin_lr: int = 80
+    margin_lr: int = 80,
+    start_times: list = None
 ) -> dict:
     """
     Synthesizes spaced, contemplative storytelling voiceover across the video duration
@@ -114,6 +115,7 @@ def generate_spaced_story_voiceover(
         speed: Speech tempo factor (default: 0.92 for slow, unhurried, reflective delivery).
         reference_audio: Cloned voice reference sample.
         font_size: ASS subtitle font size.
+        start_times: Explicit list of timeline timestamps for each phrase.
         
     Returns:
         dict: {
@@ -156,7 +158,7 @@ sys.path.append({json.dumps(str(WORKSPACE_ROOT))})
 from video_templates.core.qwen_tts_service import QwenTTSService
 from faster_whisper import WhisperModel
 
-with open({json.dumps(str(tmp_json_req))}) as f:
+with open({json.dumps(str(tmp_json_req))}, encoding="utf-8") as f:
     req = json.load(f)
 
 import torch
@@ -204,7 +206,7 @@ for i, phrase in enumerate(req['phrases']):
         "words": words
     }})
 
-with open({json.dumps(str(tmp_json_res))}, "w") as f:
+with open({json.dumps(str(tmp_json_res))}, "w", encoding="utf-8") as f:
     json.dump(results, f)
 
 print("SPACED_SYNTHESIS_SUCCESS")
@@ -213,6 +215,7 @@ print("SPACED_SYNTHESIS_SUCCESS")
     env = os.environ.copy()
     for k in ["CONDA_PREFIX", "CONDA_DEFAULT_ENV", "CONDA_PROMPT_MODIFIER", "PYTHONPATH"]:
         env.pop(k, None)
+    env["PYTHONUTF8"] = "1"
 
     py_bin = get_voiceover_python()
     try:
@@ -234,19 +237,26 @@ print("SPACED_SYNTHESIS_SUCCESS")
     tmp_json_req.unlink(missing_ok=True)
     tmp_json_res.unlink(missing_ok=True)
 
-    # 2. Compute Spaced Timeline Start Points
-    # Phrase 0: ~2.0s in
-    # Even spacing for subsequent phrases leaving pauses for music swells
-    if num_phrases == 1:
-        start_times = [2.0]
-    elif num_phrases == 2:
-        start_times = [2.0, max(12.0, total_duration * 0.50)]
-    elif num_phrases == 3:
-        start_times = [2.0, max(12.0, total_duration * 0.40), max(22.0, total_duration * 0.70)]
+    # 2. Compute Timeline Start Points
+    if start_times is not None and len(start_times) == num_phrases:
+        calc_starts = [float(s) for s in start_times]
+        # Prevent overlaps
+        for i in range(1, num_phrases):
+            prev_end = calc_starts[i - 1] + phrase_data[i - 1]["duration"] + 0.35
+            if calc_starts[i] < prev_end:
+                calc_starts[i] = prev_end
+        start_times = calc_starts
     else:
-        # Dynamic even spacing
-        gap = (total_duration - 7.0) / num_phrases
-        start_times = [2.0 + i * gap for i in range(num_phrases)]
+        # Dynamic fallback spacing
+        if num_phrases == 1:
+            start_times = [2.0]
+        elif num_phrases == 2:
+            start_times = [2.0, max(12.0, total_duration * 0.50)]
+        elif num_phrases == 3:
+            start_times = [2.0, max(12.0, total_duration * 0.40), max(22.0, total_duration * 0.70)]
+        else:
+            gap = (total_duration - 7.0) / num_phrases
+            start_times = [2.0 + i * gap for i in range(num_phrases)]
 
     ducking_intervals = []
     sample_rate = 24000
@@ -263,7 +273,6 @@ print("SPACED_SYNTHESIS_SUCCESS")
         # Load phrase wav and mix into timeline buffer
         sr, audio_data = wavfile.read(item["wav_file"])
         if sr != sample_rate:
-            # Resample if needed via simple interpolation
             num_target = int(len(audio_data) * sample_rate / sr)
             audio_data = np.interp(
                 np.linspace(0, len(audio_data), num_target, endpoint=False),
@@ -283,7 +292,7 @@ print("SPACED_SYNTHESIS_SUCCESS")
     timeline_wav = output_dir / "timeline_spaced_voiceover.wav"
     wavfile.write(timeline_wav, sample_rate, full_audio_buffer)
 
-    # 3. Generate Kinetic Highlighted ASS Subtitles
+    # 3. Generate Kinetic Highlighted ASS Subtitles (Chunked into 5-6 word clauses)
     ass_file = output_dir / "kinetic_highlight_subtitles.ass"
     ass_lines = [
         "[Script Info]",
@@ -295,7 +304,6 @@ print("SPACED_SYNTHESIS_SUCCESS")
         "",
         "[V4+ Styles]",
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
-        # Style: Centered lower-third (Alignment=2), bold white with black outline and drop shadow
         f"Style: Default, Liberation Sans, {font_size}, &H00FFFFFF, &H000000FF, &H00000000, &H90000000, 1, 0, 0, 0, 100, 100, 1.2, 0, 1, 3.5, 2.0, 2, {margin_lr}, {margin_lr}, {margin_v}, 1",
         "",
         "[Events]",
@@ -305,44 +313,47 @@ print("SPACED_SYNTHESIS_SUCCESS")
     for item in phrase_data:
         t_base = item["timeline_start"]
         words = item["words"]
-        raw_words = [w["word"] for w in words]
-        
         if not words:
-            # Fallback if no word tokens
             t1_str = format_ass_time(t_base)
             t2_str = format_ass_time(item["timeline_end"])
             ass_lines.append(f"Dialogue: 0,{t1_str},{t2_str},Default,,0,0,0,,{item['text']}")
             continue
 
-        # Optional pre-speech lead-in so the line displays before word 0 begins
-        w0_start = t_base + words[0]["start"]
-        if w0_start > t_base + 0.08:
-            lead_in_text = " ".join([f"{{\\c&H00D0D0D0\\b0}}{w}{{\\r}}" for w in raw_words])
-            ass_lines.append(f"Dialogue: 0,{format_ass_time(t_base)},{format_ass_time(w0_start)},Default,,0,0,0,,{lead_in_text}")
+        # Split words into digestible clauses of max 6 words for cinematic clarity
+        chunk_size = 6
+        chunks = [words[k:k + chunk_size] for k in range(0, len(words), chunk_size)]
 
-        # For each word, emit a dialogue slice highlighting the active word
-        for w_idx, w_obj in enumerate(words):
-            w_start = t_base + w_obj["start"]
-            # Hold highlight until next word starts or end of phrase
-            if w_idx + 1 < len(words):
-                w_end = t_base + words[w_idx + 1]["start"]
-            else:
-                w_end = t_base + w_obj["end"] + 0.45
+        for chunk in chunks:
+            chunk_raw = [w["word"] for w in chunk]
+            c_start = t_base + chunk[0]["start"]
+            c_end = t_base + chunk[-1]["end"] + 0.35
 
-            t1_str = format_ass_time(w_start)
-            t2_str = format_ass_time(w_end)
+            # Lead in for chunk
+            if chunk[0]["start"] > 0.08:
+                lead_t1 = format_ass_time(c_start - 0.15)
+                lead_t2 = format_ass_time(c_start)
+                lead_text = " ".join([f"{{\\c&H00D0D0D0\\b0}}{w}{{\\r}}" for w in chunk_raw])
+                ass_lines.append(f"Dialogue: 0,{lead_t1},{lead_t2},Default,,0,0,0,,{lead_text}")
 
-            # Build line text: active word is glowing radiant gold (\\c&H0000D7FF), others are muted silver (\\c&H00D0D0D0)
-            highlighted_line = []
-            for j, word_str in enumerate(raw_words):
-                if j == w_idx:
-                    # Radiant Gold, Bold
-                    highlighted_line.append(f"{{\\c&H0000D7FF\\b1}}{word_str}{{\\r}}")
+            for w_idx, w_obj in enumerate(chunk):
+                w_start = t_base + w_obj["start"]
+                if w_idx + 1 < len(chunk):
+                    w_end = t_base + chunk[w_idx + 1]["start"]
                 else:
-                    highlighted_line.append(f"{{\\c&H00D0D0D0\\b0}}{word_str}{{\\r}}")
+                    w_end = c_end
 
-            rendered_text = " ".join(highlighted_line)
-            ass_lines.append(f"Dialogue: 0,{t1_str},{t2_str},Default,,0,0,0,,{rendered_text}")
+                t1_str = format_ass_time(w_start)
+                t2_str = format_ass_time(w_end)
+
+                highlighted_line = []
+                for j, word_str in enumerate(chunk_raw):
+                    if j == w_idx:
+                        highlighted_line.append(f"{{\\c&H0000D7FF\\b1}}{word_str}{{\\r}}")
+                    else:
+                        highlighted_line.append(f"{{\\c&H00D0D0D0\\b0}}{word_str}{{\\r}}")
+
+                rendered_text = " ".join(highlighted_line)
+                ass_lines.append(f"Dialogue: 0,{t1_str},{t2_str},Default,,0,0,0,,{rendered_text}")
 
     ass_file.write_text("\n".join(ass_lines), encoding="utf-8")
     print(f"  ✅ Spaced Audio Track: {timeline_wav.name}")
@@ -354,6 +365,8 @@ print("SPACED_SYNTHESIS_SUCCESS")
         "ducking_intervals": ducking_intervals,
         "phrases": phrase_data
     }
+
+
 
 
 def generate_voiceover(
@@ -380,6 +393,7 @@ service.generate_from_text({json.dumps(text)}, path={json.dumps(str(output_path)
     env = os.environ.copy()
     for k in ["CONDA_PREFIX", "CONDA_DEFAULT_ENV", "CONDA_PROMPT_MODIFIER", "PYTHONPATH"]:
         env.pop(k, None)
+    env["PYTHONUTF8"] = "1"
 
     subprocess.run(
         [str(py_bin), "-c", runner_code],

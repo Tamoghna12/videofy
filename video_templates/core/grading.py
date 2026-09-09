@@ -6,7 +6,7 @@ for video and photo conforming.
 
 from pathlib import Path
 
-WORKSPACE_DIR = Path("/home/tamoghna/Documents/Video_editing")
+WORKSPACE_DIR = Path(__file__).resolve().parent.parent.parent
 LUTS_DIR = WORKSPACE_DIR / "assets" / "luts"
 
 
@@ -49,8 +49,11 @@ def get_color_filter(grade_type="summer_vibrant", lut_name=None):
 
     lut_file = resolve_lut(lut_name)
     if lut_file:
-        escaped_path = str(lut_file).replace("\\", "/").replace(":", "\\:")
-        return f"lut3d=file='{escaped_path}'"
+        escaped_path = lut_file.as_posix().replace(":", "\\:")
+        lut_filter = f"lut3d=file='{escaped_path}'"
+        if grade_type and grade_type in PRESET_GRADES and grade_type != "clean_landscape":
+            return f"{lut_filter},{PRESET_GRADES[grade_type]}"
+        return lut_filter
     
     if grade_type in PRESET_GRADES:
         return PRESET_GRADES[grade_type]

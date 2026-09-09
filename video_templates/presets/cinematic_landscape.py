@@ -47,13 +47,13 @@ def render(
     output_file.parent.mkdir(parents=True, exist_ok=True)
     
     tmp_dir = output_file.parent / f"_tmp_{output_file.stem}"
-    if tmp_dir.exists():
-        shutil.rmtree(tmp_dir)
     tmp_dir.mkdir(parents=True, exist_ok=True)
 
     color_vf = get_color_filter(grade_type=grade_preset, lut_name=lut_name)
     timeline_segments = []
     shot_captions = []
+    shot_voiceovers = []
+    shot_voiceover_starts = []
     curr_total = 0.0
 
     if shots:
@@ -64,11 +64,14 @@ def render(
                 st = float(shot.get("start", 0.0))
                 et = float(shot.get("end", st + 5.0))
                 cap = shot.get("caption", f"Scene {i+1:02d}")
+                vox = shot.get("voiceover") or shot.get("narration")
             elif len(shot) >= 4:
                 fn, st, et, cap = shot[:4]
+                vox = None
             else:
                 fn, st, et = shot[:3]
                 cap = f"Scene {i+1:02d}"
+                vox = None
             
             src_path = footage_dir / fn if not Path(fn).is_absolute() else Path(fn)
             if not src_path.is_file():
@@ -81,6 +84,12 @@ def render(
                     continue
             
             dur = et - st
+            shot_start = curr_total
+            if vox:
+                lead = float(shot.get("voiceover_lead", 0.5)) if isinstance(shot, dict) else 0.5
+                shot_voiceovers.append(vox.strip())
+                shot_voiceover_starts.append(shot_start + lead)
+
             seg_out = tmp_dir / f"seg_{i:02d}.mp4"
             if not (seg_out.is_file() and seg_out.stat().st_size > 100000):
                 conform_clip(
@@ -146,6 +155,13 @@ def render(
 
     # Voiceover & Kinetic Typography Synthesis
     vox_data = None
+    # If shots defined per-shot voiceovers, prioritize them for exact visual synchronization
+    if shot_voiceovers:
+        voiceover_text = " | ".join(shot_voiceovers)
+        sync_starts = shot_voiceover_starts
+    else:
+        sync_starts = None
+
     if voiceover_text and is_voiceover_available():
         vox_dir = tmp_dir / "voiceover"
         vox_speed = voiceover_speed if voiceover_speed != 1.15 else 0.92
@@ -161,7 +177,8 @@ def render(
                 margin_v=sub_margin_v,
                 play_res_x=1920,
                 play_res_y=1080,
-                margin_lr=120
+                margin_lr=120,
+                start_times=sync_starts
             )
         except Exception as e:
             print(f"⚠️ Spaced voiceover synthesis failed, using single-block fallback: {e}")

@@ -1,0 +1,72 @@
+name: "Kolkata to Loughborough Part 2: In Transit"
+preset: "cinematic_landscape"
+title: "THE MIDNIGHT REALM"
+subtitle: "PART 2: IN TRANSIT // SUSPENDED AT 35,000 FEET"
+outro_title: "PART 2: IN TRANSIT"
+outro_subtitle: "Two worlds colliding in the desert midnight 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "raw_footage/kolkata_to_lboro"
+output_file: "edit/cinematic_16x9/kolkata_to_lboro_part2_transit.mp4"
+qc_file: "edit/verify/qc_sheet_part2_transit.png"
+
+grade: "culinary_warm"
+lut: "JD_DLOG_M_CONVERSION_0.CUBE"
+music: "solas_piano.mp3"
+sfx: "train_rolling_ambience.mp3"
+black_bars: true
+max_duration: 65.0
+
+shots:
+  - file: "DJI_20251022195835_0088_D.MP4"
+    start: 0.2
+    end: 3.1
+    caption: "AEROBRIDGE // CROSSING OVER"
+    voiceover: "Stepping off solid ground and into the long journey ahead."
+
+  - file: "DJI_20251022195913_0089_D.MP4"
+    start: 0.5
+    end: 6.5
+    caption: "EMIRATES CABIN // WELCOME ABOARD"
+
+  - file: "DJI_20251022201838_0090_D.MP4"
+    start: 0.5
+    end: 6.0
+    caption: "FLIGHT DECK ICE // IN-FLIGHT MAP"
+    voiceover: "At thirty-five thousand feet, time loses its meaning as the flight tracker inches across the dark expanse."
+
+  - file: "DJI_20251022203947_0091_D.MP4"
+    start: 0.5
+    end: 6.5
+    caption: "CRUISING ALTITUDE // MIDNIGHT CABIN"
+    voiceover: "Surrounded by strangers in the quiet cabin, suspended between the life you knew and the one awaiting you."
+
+  - file: "DJI_20251023015715_0092_D.MP4"
+    start: 0.5
+    end: 6.2
+    caption: "DUBAI INTERNATIONAL // 02:00 AM TOUCHDOWN"
+    voiceover: "Stepping out into the midnight oasis of Dubai International at two in the morning."
+
+  - file: "DJI_20251023015757_0093_D.MP4"
+    start: 0.5
+    end: 6.0
+    caption: "WAYFINDING CONCOURSE // CONNECTING GATES"
+    voiceover: "Gliding down endless concourses beneath towering palm columns and gleaming glass."
+
+  - file: "DJI_20251023020526_0094_D.MP4"
+    start: 0.5
+    end: 8.5
+    caption: "DXB CENTRAL ROTUNDA // 24-HOUR PULSE"
+    voiceover: "A terminal that never sleeps. Travelers from every corner of the earth crossing paths under midnight lights."
+
+  - file: "DJI_20251023020526_0094_D.MP4"
+    start: 8.5
+    end: 16.5
+    caption: "TRANSIT OASIS // COSTA & REST"
+    voiceover: "Grabbing a warm coffee, watching the flight departures roll across the board as the world rests around you."
+
+  - file: "DJI_20251023020526_0094_D.MP4"
+    start: 16.5
+    end: 23.5
+    caption: "DUTY FREE PROMENADE // EUROPE BOUND"
+    voiceover: "Waiting for the dawn connection that will carry you onward toward a new continent."

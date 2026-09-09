@@ -7,7 +7,7 @@ smooth fade-ins/outs, and EBU R128 loudness normalization.
 import json
 from pathlib import Path
 
-WORKSPACE_DIR = Path("/home/tamoghna/Documents/Video_editing")
+WORKSPACE_DIR = Path(__file__).resolve().parent.parent.parent
 AUDIO_LIB_DIR = WORKSPACE_DIR / "assets" / "audio"
 AUDIO_SFX_DIR = AUDIO_LIB_DIR / "sfx"
 AUDIO_BGM_DIR = AUDIO_LIB_DIR / "bg_music"

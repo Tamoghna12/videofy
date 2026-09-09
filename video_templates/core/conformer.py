@@ -72,6 +72,7 @@ def conform_clip(
 
     cmd = [
         "ffmpeg", "-y", "-v", "error",
+        "-hwaccel", "d3d11va",
         "-ss", f"{start:.3f}",
         "-i", str(src_path),
         "-t", f"{dur:.3f}",

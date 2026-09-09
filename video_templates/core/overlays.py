@@ -3,8 +3,15 @@ overlays.py - Kinetic Typography, Progress Bar & Overlays Engine
 Supports 9:16 Portrait and 16:9 Landscape layouts with safe string escaping.
 """
 
-FONT_BOLD = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
-FONT_REG = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
+import os
+from pathlib import Path
+
+if os.name == "nt":
+    FONT_BOLD = "C\\:/Windows/Fonts/arialbd.ttf"
+    FONT_REG = "C\\:/Windows/Fonts/arial.ttf"
+else:
+    FONT_BOLD = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
+    FONT_REG = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
 
 
 def clean_text(s):

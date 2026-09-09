@@ -1,0 +1,116 @@
+name: "Kolkata to Loughborough Journey"
+preset: "cinematic_landscape"
+title: "KOLKATA TO LOUGHBOROUGH"
+subtitle: "A 5,000-MILE JOURNEY • CONTINENTAL CROSSING"
+outro_title: "JOURNEY TO LOUGHBOROUGH"
+outro_subtitle: "Where Passion Shapes the Future 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "raw_footage/kolkata_to_lboro"
+output_file: "edit/cinematic_16x9/kolkata_to_loughborough_journey.mp4"
+qc_file: "edit/verify/qc_sheet_kolkata_to_loughborough.png"
+
+grade: "culinary_warm"
+lut: "JD_DLOG_M_CONVERSION_0.CUBE"
+music: "experience_einaudi.mp3"
+sfx: "train_rolling_ambience.mp3"
+black_bars: true
+max_duration: 110.0
+
+shots:
+  - file: "DJI_20251022175240_0081_D.MP4"
+    start: 0.5
+    end: 3.8
+    caption: "KOLKATA APPROACH // AIRPORT HIGHWAY"
+    voiceover: "Leaving behind the familiar hum of Kolkata as dusk turns into the quiet highway."
+
+  - file: "DJI_20251022175314_0083_D.MP4"
+    start: 4.0
+    end: 11.0
+    caption: "CCU AIRPORT RAMP // DEPARTURE CONCOURSE"
+
+  - file: "DJI_20251022175421_0084_D.MP4"
+    start: 0.5
+    end: 9.5
+    caption: "GATEWAY OF BENGAL // TAGORE SCRIPT CANOPY"
+    voiceover: "Standing beneath the illuminated Bengali script canopy of the airport. One final breath of home."
+
+  - file: "DJI_20251022190433_0085_D.MP4"
+    start: 1.0
+    end: 7.0
+    caption: "DIGITAL NOMAD // FLIGHT GATE PREPARATION"
+
+  - file: "DJI_20251022195543_0087_D.MP4"
+    start: 1.0
+    end: 8.0
+    caption: "TERMINAL CONCOURSE // FINAL CALL TO BOARD"
+
+  - file: "DJI_20251022195913_0089_D.MP4"
+    start: 0.5
+    end: 6.0
+    caption: "BOARDING GATE // HEADING TO THE AEROBRIDGE"
+
+  - file: "DJI_20251022201838_0090_D.MP4"
+    start: 0.5
+    end: 6.0
+    caption: "EMIRATES CABIN // SETTLING IN FOR CRUISE"
+    voiceover: "Boarding the long-haul flight into the night, watching the world shrink into the glow of cabin screens."
+
+  - file: "DJI_20251022203947_0091_D.MP4"
+    start: 0.5
+    end: 6.0
+    caption: "CRUISING AT 35,000 FT // NIGHT SKY TRANQUILITY"
+
+  - file: "DJI_20251023015715_0092_D.MP4"
+    start: 0.5
+    end: 6.0
+    caption: "DUBAI INTERNATIONAL // MIDNIGHT TRANSIT"
+
+  - file: "DJI_20251023015757_0093_D.MP4"
+    start: 0.5
+    end: 6.0
+    caption: "DXB CONCOURSE // CROSSROADS OF THE WORLD"
+
+  - file: "DJI_20251023020526_0094_D.MP4"
+    start: 1.0
+    end: 9.5
+    caption: "DUBAI DUTY FREE // 24-HOUR ENERGY"
+    voiceover: "Midnight transit in Dubai. A whirlwind of marble and glass where wanderers from every corner intersect."
+
+  - file: "DJI_20251023130400_0095_D.MP4"
+    start: 0.5
+    end: 5.5
+    caption: "TOUCHDOWN UK // LONDON GATWICK ARRIVALS"
+
+  - file: "DJI_20251023130416_0096_D.MP4"
+    start: 0.5
+    end: 8.5
+    caption: "GATWICK CONCOURSE // BRITISH EMBLEMS & POST BOX"
+    voiceover: "Touching down into the crisp morning light of London Gatwick, greeted by the red post box and British hallmarks."
+
+  - file: "DJI_20251023130648_0098_D.MP4"
+    start: 0.5
+    end: 5.0
+    caption: "WAYFINDING // TRAIN STATION & SOUTH TERMINAL"
+
+  - file: "DJI_20251023131000_0102_D.MP4"
+    start: 1.0
+    end: 9.5
+    caption: "INTER-TERMINAL SHUTTLE // AIRPORT APRON GLIDE"
+    voiceover: "Boarding the automated airport shuttle and gliding smoothly across the taxiways toward the railway."
+
+  - file: "DJI_20251023131505_0103_D.MP4"
+    start: 0.5
+    end: 5.0
+    caption: "GATWICK RAIL STATION // CHECKING PLATFORM BOARDS"
+
+  - file: "DJI_20251023131852_0105_D.MP4"
+    start: 0.5
+    end: 5.0
+    caption: "THAMESLINK PLATFORM // NORTHBOUND RAILS"
+
+  - file: "DJI_20251023142559_0106_D.MP4"
+    start: 1.0
+    end: 11.0
+    caption: "LONDON ST PANCRAS // THE GATEWAY TO LOUGHBOROUGH"
+    voiceover: "Standing in London St Pancras for the final train north to Loughborough. A whole new chapter begins."

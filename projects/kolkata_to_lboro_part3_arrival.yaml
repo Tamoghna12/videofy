@@ -1,0 +1,87 @@
+name: "Kolkata to Loughborough Part 3: Touching Down"
+preset: "cinematic_landscape"
+title: "TOUCHING DOWN"
+subtitle: "PART 3: THE ROAD NORTH // GATWICK TO LOUGHBOROUGH"
+outro_title: "PART 3: TOUCHING DOWN"
+outro_subtitle: "Where Passion Shapes the Future • Loughborough 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "raw_footage/kolkata_to_lboro"
+output_file: "edit/cinematic_16x9/kolkata_to_lboro_part3_arrival.mp4"
+qc_file: "edit/verify/qc_sheet_part3_arrival.png"
+
+grade: "culinary_warm"
+lut: "JD_DLOG_M_CONVERSION_0.CUBE"
+music: "can_you_hear_the_music.mp3"
+sfx: "train_rolling_ambience.mp3"
+black_bars: true
+max_duration: 85.0
+
+shots:
+  - file: "DJI_20251023130400_0095_D.MP4"
+    start: 0.2
+    end: 6.2
+    caption: "TOUCHDOWN UK // LONDON GATWICK ARRIVALS"
+    voiceover: "Touching down into the crisp morning air of London Gatwick. You are finally here."
+
+  - file: "DJI_20251023130416_0096_D.MP4"
+    start: 0.5
+    end: 7.5
+    caption: "GATWICK CONCOURSE // BRITISH HALLMARKS"
+    voiceover: "The unmistakable red of British post boxes and the quiet hum of a new country."
+
+  - file: "DJI_20251023130416_0096_D.MP4"
+    start: 7.5
+    end: 14.5
+    caption: "ARRIVALS PROMENADE // FIRST IMPRESSIONS"
+
+  - file: "DJI_20251023130630_0097_D.MP4"
+    start: 0.5
+    end: 8.0
+    caption: "WAYFINDING // SOUTH TERMINAL TRANSIT"
+    voiceover: "Following overhead signs toward the transit shuttle and the railway station."
+
+  - file: "DJI_20251023130648_0098_D.MP4"
+    start: 0.5
+    end: 5.5
+    caption: "TRANSIT CORRIDOR // TO MONORAIL"
+
+  - file: "DJI_20251023130711_0099_D.MP4"
+    start: 0.5
+    end: 6.5
+    caption: "GLASS WALKWAY // SHUTTLE PLATFORM"
+
+  - file: "DJI_20251023130856_0100_D.MP4"
+    start: 0.2
+    end: 2.4
+    caption: "MONORAIL DOORS // AUTOMATED SHUTTLE"
+    voiceover: "Boarding the automated airport monorail, watching the doors glide shut."
+
+  - file: "DJI_20251023131000_0102_D.MP4"
+    start: 0.5
+    end: 14.5
+    caption: "APRON GLIDE // MONORAIL ACROSS GATWICK"
+    voiceover: "Gliding high above the grey tarmac, watching aircraft line the taxiways under British skies."
+
+  - file: "DJI_20251023131505_0103_D.MP4"
+    start: 0.5
+    end: 5.3
+    caption: "GATWICK RAIL STATION // CHECKING BOARDS"
+    voiceover: "At Gatwick railway station, checking departure boards for the train to London."
+
+  - file: "DJI_20251023131514_0104_D.MP4"
+    start: 0.2
+    end: 1.9
+    caption: "PLATFORM ACCESS // RAILWAY GLIDE"
+
+  - file: "DJI_20251023131852_0105_D.MP4"
+    start: 0.5
+    end: 5.2
+    caption: "THAMESLINK PLATFORM // HEADING INTO LONDON"
+    voiceover: "Wheels clattering against steel, watching the English countryside roll toward the capital."
+
+  - file: "DJI_20251023142559_0106_D.MP4"
+    start: 0.5
+    end: 15.5
+    caption: "ST PANCRAS INTERNATIONAL // TRAIN TO LOUGHBOROUGH"
+    voiceover: "Beneath the soaring arches of St Pancras, boarding the final train north to Loughborough. A whole new chapter begins."

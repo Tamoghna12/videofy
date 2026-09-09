@@ -1,0 +1,81 @@
+name: "Kolkata to Loughborough Part 1: The Departure"
+preset: "cinematic_landscape"
+title: "WHISPERS OF KOLKATA"
+subtitle: "PART 1: THE DEPARTURE // FAREWELL TO HOME"
+outro_title: "PART 1: THE DEPARTURE"
+outro_subtitle: "Leaving roots behind to chase the horizon 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "raw_footage/kolkata_to_lboro"
+output_file: "edit/cinematic_16x9/kolkata_to_lboro_part1_departure.mp4"
+qc_file: "edit/verify/qc_sheet_part1_departure.png"
+
+grade: "culinary_warm"
+lut: "JD_DLOG_M_CONVERSION_0.CUBE"
+music: "experience_einaudi.mp3"
+sfx: "train_rolling_ambience.mp3"
+black_bars: true
+max_duration: 85.0
+
+shots:
+  - file: "DJI_20251022175240_0081_D.MP4"
+    start: 0.1
+    end: 3.8
+    caption: "KOLKATA ARTERIAL // NIGHT HIGHWAY"
+    voiceover: "Leaving behind the familiar hum of Kolkata as dusk turns into the quiet highway."
+
+  - file: "DJI_20251022175300_0082_D.MP4"
+    start: 0.5
+    end: 7.5
+    caption: "CITY LIGHTS // HIGHWAY GLIDE"
+
+  - file: "DJI_20251022175314_0083_D.MP4"
+    start: 1.0
+    end: 10.0
+    caption: "AIRPORT RAMP // TERMINAL APPROACH"
+    voiceover: "Pulling up the elevated ramp, watching the glass terminal rise against the dark sky."
+
+  - file: "DJI_20251022175314_0083_D.MP4"
+    start: 10.0
+    end: 22.0
+    caption: "CURBSIDE DROP-OFF // FAREWELL TO HOME"
+    voiceover: "Every corner holds a memory, every street an echo. Tonight, the road leads only forward."
+
+  - file: "DJI_20251022175421_0084_D.MP4"
+    start: 0.5
+    end: 10.5
+    caption: "GATEWAY OF BENGAL // TAGORE SCRIPT CANOPY"
+    voiceover: "Standing beneath the illuminated Bengali script canopy of the airport, taking one final breath of home."
+
+  - file: "DJI_20251022190433_0085_D.MP4"
+    start: 0.5
+    end: 9.5
+    caption: "DEPARTURE LOUNGE // COUNTING DOWN"
+    voiceover: "Inside the departure hall, the world slows down. Laptop open, watching the boarding clock tick away."
+
+  - file: "DJI_20251022190454_0086_D.MP4"
+    start: 0.5
+    end: 5.5
+    caption: "GATE SCREEN // FINAL ANNOUNCEMENTS"
+
+  - file: "DJI_20251022195543_0087_D.MP4"
+    start: 1.0
+    end: 11.0
+    caption: "TERMINAL CONCOURSE // FINAL CALL"
+    voiceover: "Final call for boarding. Gathering your bag and stepping forward onto the jet bridge."
+
+  - file: "DJI_20251022195835_0088_D.MP4"
+    start: 0.2
+    end: 3.1
+    caption: "AEROBRIDGE // STEPPING FORWARD"
+
+  - file: "DJI_20251022195913_0089_D.MP4"
+    start: 0.5
+    end: 6.5
+    caption: "EMIRATES BOARDING // CABIN ENTRANCE"
+    voiceover: "The cabin doors seal shut. Bengal fades into the darkness below. The journey has begun."
+
+  - file: "DJI_20251022201838_0090_D.MP4"
+    start: 0.5
+    end: 5.5
+    caption: "AIRBORNE // HEADING INTO THE NIGHT"
