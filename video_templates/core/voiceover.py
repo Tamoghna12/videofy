@@ -123,8 +123,9 @@ def generate_spaced_story_voiceover(
             "phrases": list[dict]
         }
     """
+    py_bin = get_voiceover_python()
     if not is_voiceover_available():
-        raise RuntimeError(f"Voiceover environment not ready: {KITTEN_PYTHON}")
+        raise RuntimeError(f"Voiceover environment not ready: {py_bin}")
 
     ref_audio = Path(reference_audio) if reference_audio else DEFAULT_REF_AUDIO
     output_dir = Path(output_dir)
@@ -331,7 +332,7 @@ print("SPACED_SYNTHESIS_SUCCESS")
             t1_str = format_ass_time(w_start)
             t2_str = format_ass_time(w_end)
 
-            # Build line text: active word is glowing radiant gold (\c&H0000D7FF), others are muted silver (\c&H00D0D0D0)
+            # Build line text: active word is glowing radiant gold (\\c&H0000D7FF), others are muted silver (\\c&H00D0D0D0)
             highlighted_line = []
             for j, word_str in enumerate(raw_words):
                 if j == w_idx:
