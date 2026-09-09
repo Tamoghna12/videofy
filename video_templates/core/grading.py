@@ -11,6 +11,12 @@ LUTS_DIR = WORKSPACE_DIR / "assets" / "luts"
 
 
 PRESET_GRADES = {
+    "odyssey": (
+        "curves=master='0/0 0.15/0.17 0.5/0.53 0.85/0.87 1/0.98',"
+        "colorbalance=rs=-0.01:gs=0.0:bs=0.02:rm=0.0:gm=0.01:bm=0.02:rh=0.0:gh=0.0:bh=0.01,"
+        "eq=contrast=1.06:brightness=0.01:saturation=1.08:gamma=1.02,"
+        "cas=0.30"
+    ),
     "summer_vibrant": "eq=contrast=1.06:brightness=0.03:saturation=1.14:gamma=1.04,curves=master='0/0.02 0.5/0.52 1/1'",
     "culinary_warm": "eq=contrast=1.06:brightness=0.03:saturation=1.08:gamma=1.06,curves=master='0/0.02 0.5/0.52 1/1'",
     "clean_landscape": "curves=master='0/0.04 0.2/0.30 0.5/0.56 0.8/0.82 1/0.97',eq=contrast=1.03:brightness=0.035:gamma=1.14:saturation=1.10",
@@ -36,13 +42,15 @@ def resolve_lut(lut_name_or_path):
 def get_color_filter(grade_type="summer_vibrant", lut_name=None):
     """
     Returns the FFmpeg video filter snippet for color grading.
-    If a valid LUT is provided, combines pre-LUT shadow/midtone exposure compensation
-    with the 3D LUT to prevent crushed darks and maintain filmic highlights.
+    Provides calibrated tone curves, color balance and filmic color rendering.
     """
+    if grade_type == "odyssey":
+        return PRESET_GRADES["odyssey"]
+
     lut_file = resolve_lut(lut_name)
     if lut_file:
         escaped_path = str(lut_file).replace("\\", "/").replace(":", "\\:")
-        return f"curves=master='0/0.04 0.2/0.30 0.5/0.56 0.8/0.82 1/0.97',eq=brightness=0.035:contrast=1.03:gamma=1.14:saturation=1.10,lut3d=file='{escaped_path}'"
+        return f"lut3d=file='{escaped_path}'"
     
     if grade_type in PRESET_GRADES:
         return PRESET_GRADES[grade_type]

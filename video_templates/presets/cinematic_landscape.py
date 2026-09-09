@@ -59,8 +59,13 @@ def render(
     if shots:
         # Use curated shot sequence
         for i, shot in enumerate(shots):
-            if len(shot) == 4:
-                fn, st, et, cap = shot
+            if isinstance(shot, dict):
+                fn = shot.get("file") or shot.get("filename") or shot.get("path")
+                st = float(shot.get("start", 0.0))
+                et = float(shot.get("end", st + 5.0))
+                cap = shot.get("caption", f"Scene {i+1:02d}")
+            elif len(shot) >= 4:
+                fn, st, et, cap = shot[:4]
             else:
                 fn, st, et = shot[:3]
                 cap = f"Scene {i+1:02d}"
@@ -77,18 +82,19 @@ def render(
             
             dur = et - st
             seg_out = tmp_dir / f"seg_{i:02d}.mp4"
-            conform_clip(
-                src_path,
-                start=st,
-                end=et,
-                out_path=seg_out,
-                target_res="1920x1080",
-                fps=24,
-                color_filter=color_vf,
-                zoom_rate=0.015,
-                accel=accel,
-                smart_crop=smart_crop
-            )
+            if not (seg_out.is_file() and seg_out.stat().st_size > 100000):
+                conform_clip(
+                    src_path,
+                    start=st,
+                    end=et,
+                    out_path=seg_out,
+                    target_res="1920x1080",
+                    fps=24,
+                    color_filter=color_vf,
+                    zoom_rate=0.015,
+                    accel=accel,
+                    smart_crop=smart_crop
+                )
             timeline_segments.append(seg_out)
             shot_captions.append((dur, cap))
             curr_total += dur

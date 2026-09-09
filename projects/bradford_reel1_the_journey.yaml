@@ -1,0 +1,66 @@
+name: "Bradford Reel 1: The Journey Begins"
+preset: "cinematic_landscape"
+title: "BRADFORD • THE JOURNEY BEGINS"
+subtitle: "CROSSING YORKSHIRE BY TRAIN • 1850 ARCHES"
+outro_title: "YORKSHIRE TRAVELS"
+outro_subtitle: "Save for your northern railway journey 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "01_raw_footage/bradford"
+output_file: "edit/cinematic_16x9/bradford_reel1_the_journey.mp4"
+qc_file: "edit/verify/qc_sheet_bradford_reel1.png"
+
+grade: "clean_landscape"
+lut: "CINECOLOR_GOLDEN_HOUR.CUBE"
+music: "experience_einaudi.mp3"
+sfx: "train_rolling_ambience.mp3"
+black_bars: true
+
+voiceover:
+  speed: 0.92
+  text: >-
+    Leaving the open Yorkshire fields behind... as the train cuts quietly through the morning light. |
+    Stepping into Bradford. Beneath towering Victorian railway arches that have stood since eighteen fifty. |
+    You walk past honey-colored stone and quiet streets... and let the rhythm of the city take over.
+
+shots:
+  - file: "DJI_20260531141209_0261_D.MP4"
+    start: 3.0
+    end: 7.0
+    caption: "Travelling through Yorkshire countryside"
+  - file: "DJI_20260723171555_0262_D.MP4"
+    start: 1.5
+    end: 5.0
+    caption: "Arriving at Bradford Interchange"
+  - file: "DJI_20260723171615_0263_D.MP4"
+    start: 2.0
+    end: 5.5
+    caption: "Stepping onto the platform"
+  - file: "DJI_20260723171641_0264_D.MP4"
+    start: 1.0
+    end: 4.5
+    caption: "Bradford city center welcome"
+  - file: "DJI_20260723171744_0265_D.MP4"
+    start: 2.0
+    end: 6.0
+    caption: "Stepping into the historic city"
+  - file: "DJI_20260723171945_0266_D.MP4"
+    start: 2.0
+    end: 6.5
+    caption: "Victorian Railway Arches • Built 1850"
+  - file: "DJI_20260723173540_0270_D.MP4"
+    start: 4.0
+    end: 8.5
+    caption: "Exploring historic Little Germany"
+  - file: "DJI_20260723174010_0271_D.MP4"
+    start: 2.0
+    end: 6.0
+    caption: "Timeless Yorkshire stone architecture"
+  - file: "DJI_20260723180816_0273_D.MP4"
+    start: 1.0
+    end: 4.5
+    caption: "Checking into our room"
+  - file: "DJI_20260723183212_0274_D.MP4"
+    start: 1.0
+    end: 4.5
+    caption: "Journey complete • Relaxing evening ahead"

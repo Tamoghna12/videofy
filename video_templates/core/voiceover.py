@@ -140,13 +140,17 @@ from faster_whisper import WhisperModel
 with open({json.dumps(str(tmp_json_req))}) as f:
     req = json.load(f)
 
+import torch
 service = QwenTTSService(reference_audio=req['ref_audio'], speed=req['speed'])
-whisper = WhisperModel('base', device='cuda', compute_type='float16')
+w_dev = 'cuda' if torch.cuda.is_available() else 'cpu'
+w_comp = 'float16' if w_dev == 'cuda' else 'int8'
+whisper = WhisperModel('base', device=w_dev, compute_type=w_comp)
 
 results = []
 for i, phrase in enumerate(req['phrases']):
     out_wav = os.path.join(req['out_dir'], f"phrase_{{i}}.wav")
-    service.generate_from_text(phrase, path=out_wav)
+    if not (os.path.isfile(out_wav) and os.path.getsize(out_wav) > 10000):
+        service.generate_from_text(phrase, path=out_wav)
     
     segments, _ = whisper.transcribe(out_wav, word_timestamps=True, initial_prompt=phrase)
     words = []

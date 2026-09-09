@@ -1,0 +1,58 @@
+name: "Bradford Reel 3: City Hall & Twilight Glow"
+preset: "cinematic_landscape"
+title: "BRADFORD CITY HALL"
+subtitle: "A VICTORIAN GOTHIC MASTERPIECE • 1873"
+outro_title: "DISCOVER YORKSHIRE"
+outro_subtitle: "Bradford • UK City of Culture 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "01_raw_footage/bradford"
+output_file: "edit/cinematic_16x9/bradford_reel3_city_hall_twilight.mp4"
+qc_file: "edit/verify/qc_sheet_bradford_reel3.png"
+
+grade: "clean_landscape"
+lut: "Rec709 Kodak 2383 D65.cube"
+music: "can_you_hear_the_music.mp3"
+sfx: "church_bells_cathedral.mp3"
+black_bars: true
+
+voiceover:
+  speed: 0.92
+  text: >-
+    As evening deepens, the sandstone heart of Bradford begins to glow in twilight. |
+    Walking through Centenary Square, beneath the grand Venetian Gothic arches of City Hall. |
+    Two hundred and twenty feet above, the clock tower chimes into the cool Yorkshire night.
+
+shots:
+  - file: "DJI_20260723174010_0271_D.MP4"
+    start: 3.0
+    end: 7.0
+    caption: "Historic Victorian bank architecture"
+  - file: "DJI_20260723204601_0280_D.MP4"
+    start: 12.0
+    end: 16.5
+    caption: "Approaching Centenary Square at dusk"
+  - file: "DJI_20260723205102_0281_D.MP4"
+    start: 5.0
+    end: 9.5
+    caption: "Strolling through City Park promenade"
+  - file: "DJI_20260723205159_0282_D.MP4"
+    start: 4.0
+    end: 8.5
+    caption: "The grand civic heart of Bradford"
+  - file: "DJI_20260723205446_0283_D.MP4"
+    start: 0.5
+    end: 6.0
+    caption: "The Iconic 220-ft Clock Tower"
+  - file: "DJI_20260723205446_0283_D.MP4"
+    start: 18.0
+    end: 23.0
+    caption: "Venetian Gothic Elegance • Built 1873"
+  - file: "DJI_20260723205446_0283_D.MP4"
+    start: 30.0
+    end: 34.5
+    caption: "Grade I Listed Heritage in golden light"
+  - file: "DJI_20260723204601_0280_D.MP4"
+    start: 28.0
+    end: 32.5
+    caption: "Twilight magic falling over Yorkshire"

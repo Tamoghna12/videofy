@@ -1,0 +1,25 @@
+name: "Northern Ireland: Castlerock"
+preset: "cinematic_landscape"
+title: "CASTLEROCK, NORTHERN IRELAND"
+subtitle: "CAUSEWAY COASTAL ROUTE"
+outro_title: "DISCOVER CASTLEROCK"
+outro_subtitle: "Save for your Causeway trip 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "01_raw_footage/Northern Ireland/castle_rock"
+output_file: "edit/reels_9x16/castlerock_insta_reel_9x16.mp4"
+qc_file: "edit/verify/qc_sheet_castlerock_reel.png"
+
+grade: "clean_landscape"
+lut: "CINECOLOR_GOLDEN_HOUR.CUBE"
+music: "solas_jamie_duffy.mp3"
+sfx: "ocean_waves_crashing.mp3"
+black_bars: true
+max_duration: 36.0
+
+voiceover:
+  speed: 0.92
+  text: >-
+    Where the road quietly turns toward the sea. |
+    Salty Atlantic breezes rolling over the coastal moors and golden dunes. |
+    Take a breath... this is the wild north coast at its most peaceful.

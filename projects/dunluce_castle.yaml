@@ -1,0 +1,25 @@
+name: "Northern Ireland: Dunluce Castle"
+preset: "cinematic_landscape"
+title: "DUNLUCE CASTLE"
+subtitle: "NORTH ANTRIM COAST • EST. 1500"
+outro_title: "ANTRIM COASTLINE"
+outro_subtitle: "Explore the ruins of Ireland 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "01_raw_footage/Northern Ireland/dunluce_castle"
+output_file: "edit/reels_9x16/dunluce_castle_template_reel.mp4"
+qc_file: "edit/verify/qc_sheet_dunluce_template.png"
+
+grade: "clean_landscape"
+lut: "CINECOLOR_GOLDEN_HOUR.CUBE"
+music: "solas_jamie_duffy.mp3"
+sfx: "ocean_waves_crashing.mp3"
+black_bars: true
+max_duration: 36.0
+
+voiceover:
+  speed: 0.92
+  text: >-
+    Emerging from the North Atlantic sea mist. |
+    A medieval fortress clinging to the edge of a sheer hundred-foot basalt cliff. |
+    Stories whispered by the waves... of kings, storms, and the wild Irish sea.

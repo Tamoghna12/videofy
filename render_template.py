@@ -9,6 +9,8 @@ and AI subject auto-framing.
 
 import argparse
 import sys
+import json
+import yaml
 from pathlib import Path
 
 # Add workspace root to sys.path
@@ -93,10 +95,206 @@ def print_sfx(category=None):
     print("  👉 Usage in render:  --sfx <id> (e.g. --sfx whoosh_fast or --sfx ocean_waves_crashing)\n")
 
 
+def load_project_file(project_path: Path) -> dict:
+    """Parse a YAML or JSON project recipe file."""
+    p = Path(project_path).resolve()
+    if not p.is_file():
+        raise FileNotFoundError(f"Project recipe file not found: {p}")
+    
+    with open(p, "r", encoding="utf-8") as f:
+        if p.suffix.lower() in [".yaml", ".yml"]:
+            data = yaml.safe_load(f)
+        elif p.suffix.lower() == ".json":
+            data = json.load(f)
+        else:
+            data = yaml.safe_load(f)
+            
+    if not isinstance(data, dict):
+        raise ValueError(f"Invalid recipe format in {p}: expected dictionary/mapping")
+        
+    data["_project_dir"] = p.parent
+    data["_project_path"] = p
+    return data
+
+
+def resolve_project_path(path_val, base_dir=None):
+    """Resolve paths relative to base_dir or WORKSPACE_ROOT."""
+    if not path_val:
+        return None
+    p = Path(path_val)
+    if p.is_absolute():
+        return p
+    if base_dir and (base_dir / p).exists():
+        return (base_dir / p).resolve()
+    return (WORKSPACE_ROOT / p).resolve()
+
+
+def validate_project(cfg: dict) -> bool:
+    """Validate project configuration, verify media paths and shot timings without rendering."""
+    print(f"\n📋 Validating Project Recipe: {cfg.get('name', cfg.get('_project_path', 'Unnamed'))}")
+    print("=" * 70)
+    preset = cfg.get("preset", "cinematic_landscape")
+    print(f"  • Preset           : {preset}")
+    if preset not in PRESETS:
+        print(f"    ❌ Unknown preset '{preset}'. Available: {list(PRESETS.keys())}")
+        return False
+    
+    footage_dir = resolve_project_path(cfg.get("footage_dir") or cfg.get("footage"), cfg.get("_project_dir"))
+    print(f"  • Footage Directory: {footage_dir} {'✅' if footage_dir and footage_dir.exists() else '❌ (Not Found)'}")
+    
+    output_file = resolve_project_path(cfg.get("output_file") or cfg.get("output"), cfg.get("_project_dir"))
+    print(f"  • Deliverable Path : {output_file}")
+    
+    music = cfg.get("music") or cfg.get("music_track")
+    sfx = cfg.get("sfx") or cfg.get("sfx_track")
+    print(f"  • Audio Pairing    : Music={music}, SFX={sfx}")
+    
+    shots = cfg.get("shots") or cfg.get("timeline")
+    if shots:
+        print(f"  • Curated Shots    : {len(shots)} items defined")
+        total_planned = 0.0
+        missing_count = 0
+        for i, s in enumerate(shots):
+            if isinstance(s, dict):
+                fn = s.get("file") or s.get("filename")
+                st = float(s.get("start", 0.0))
+                et = float(s.get("end", st + 5.0))
+            elif len(s) >= 3:
+                fn, st, et = s[:3]
+            else:
+                continue
+            dur = et - st
+            total_planned += dur
+            
+            sp = resolve_project_path(fn, footage_dir)
+            if not sp.is_file() and footage_dir:
+                matches = list(footage_dir.glob(f"**/{Path(fn).name}"))
+                if not matches:
+                    print(f"    ⚠️ Shot #{i+1:02d} missing: {fn}")
+                    missing_count += 1
+        print(f"  • Planned Duration : {total_planned:.1f}s across {len(shots)} cuts")
+        if missing_count == 0:
+            print("  • Shot Media Check : ✅ All media files verified on disk")
+        else:
+            print(f"  • Shot Media Check : ⚠️ {missing_count} media files missing")
+    
+    vox = cfg.get("voiceover")
+    if vox:
+        speed = vox.get("speed", 0.92) if isinstance(vox, dict) else 0.92
+        text = vox.get("text", "") if isinstance(vox, dict) else str(vox)
+        phrases = [p.strip() for p in text.split(" | ") if p.strip()]
+        print(f"  • Voiceover Script : ✅ {len(phrases)} phrases ({len(text)} chars, speed={speed}x)")
+    
+    print("=" * 70)
+    print("✨ Validation Check Complete!\n")
+    return True
+
+
+def render_project(cfg: dict, args):
+    """Execute video template render for a loaded declarative recipe."""
+    preset_name = cfg.get("preset", "cinematic_landscape")
+    # Command line override if explicitly supplied
+    if args.preset and args.preset != "insta_catchy_reel":
+        preset_name = args.preset
+        
+    footage_dir = resolve_project_path(cfg.get("footage_dir") or cfg.get("footage"), cfg.get("_project_dir"))
+    output_file = resolve_project_path(cfg.get("output_file") or cfg.get("output"), cfg.get("_project_dir"))
+    qc_file = resolve_project_path(cfg.get("qc_file") or cfg.get("qc_sheet") or cfg.get("qc"), cfg.get("_project_dir"))
+    
+    vox = cfg.get("voiceover")
+    vox_text = None
+    vox_speed = 0.92
+    if isinstance(vox, dict):
+        vox_text = vox.get("text")
+        vox_speed = float(vox.get("speed", 0.92))
+    elif isinstance(vox, str):
+        vox_text = vox
+    
+    # Allow CLI overrides
+    if args.voiceover:
+        vox_text = args.voiceover
+    if args.voiceover_speed != 0.92:
+        vox_speed = args.voiceover_speed
+
+    kwargs = {
+        "footage_dir": footage_dir,
+        "output_file": output_file,
+        "qc_file": qc_file,
+        "title": cfg.get("title", "CINEMATIC JOURNEY"),
+        "subtitle": cfg.get("subtitle", ""),
+        "outro_title": cfg.get("outro_title", ""),
+        "outro_subtitle": cfg.get("outro_subtitle", ""),
+        "handle": cfg.get("handle", "@tamoghna.travels"),
+        "lut_name": cfg.get("lut") or cfg.get("lut_name"),
+        "grade_preset": cfg.get("grade") or cfg.get("grade_preset", "clean_landscape"),
+        "music_track": cfg.get("music") or cfg.get("music_track"),
+        "sfx_track": cfg.get("sfx") or cfg.get("sfx_track"),
+        "max_duration": cfg.get("max_duration") or cfg.get("duration", 120.0),
+        "video_clip_duration": cfg.get("clip_duration", 5.0),
+        "black_bars": cfg.get("black_bars", False),
+        "smart_crop": cfg.get("smart_crop", False),
+        "beat_sync": cfg.get("beat_sync", False),
+        "shots": cfg.get("shots") or cfg.get("timeline"),
+        "voiceover_text": vox_text,
+        "voiceover_speed": vox_speed,
+        "accel": args.accel if args.accel != "auto" else cfg.get("accel", "auto")
+    }
+    
+    # Apply explicit CLI overrides if set
+    for field in ["title", "subtitle", "outro_title", "outro_subtitle", "handle", "grade", "lut", "music", "sfx"]:
+        val = getattr(args, field, None)
+        if val is not None:
+            if field == "grade":
+                kwargs["grade_preset"] = val
+            elif field == "lut":
+                kwargs["lut_name"] = None if val.lower() == "none" else val
+            elif field == "music":
+                kwargs["music_track"] = val
+            elif field == "sfx":
+                kwargs["sfx_track"] = val
+            else:
+                kwargs[field] = val
+                
+    if args.duration is not None:
+        kwargs["max_duration"] = args.duration
+    if args.black_bars:
+        kwargs["black_bars"] = True
+    if args.smart_crop:
+        kwargs["smart_crop"] = True
+    if args.beat_sync:
+        kwargs["beat_sync"] = True
+
+    print("\n" + "=" * 75)
+    print(f"🚀 Executing Declarative Recipe: [{cfg.get('name', output_file.name)}]")
+    print(f"🎬 Preset Engine     : {preset_name}")
+    print(f"📂 Footage Directory : {footage_dir}")
+    print(f"🎯 Output Deliverable: {output_file}")
+    print(f"⚡ Acceleration Mode : {kwargs['accel'].upper()}")
+    if kwargs.get('shots'):
+        print(f"✂️ Curated Sequence  : {len(kwargs['shots'])} planned shots")
+    if vox_text:
+        print(f"🎙️ Cloned Voiceover : ENABLED ({len(vox_text)} chars, speed={vox_speed:.2f}x)")
+    if qc_file:
+        print(f"🔍 Visual QC Sheet   : {qc_file}")
+    print("=" * 75 + "\n")
+    
+    render_fn = PRESETS[preset_name]
+    res = render_fn(**kwargs)
+    print(f"\n🎉 Successfully rendered deliverable: {output_file.name}")
+    return res
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Videofy Engine CLI - Render high-impact videos with standard templates."
     )
+    # Project recipe mode
+    parser.add_argument("-c", "--config", "--project", dest="projects", type=str, nargs="*", default=None,
+                        help="Path to one or more declarative project recipe files (.yaml or .json)")
+    parser.add_argument("--validate", "--dry-run", dest="dry_run", action="store_true",
+                        help="Validate project configuration, verify media paths and shot timings without rendering")
+
+    # Interactive / CLI Flags Mode
     parser.add_argument("-p", "--preset", choices=list(PRESETS.keys()), default="insta_catchy_reel",
                         help="Video preset to render (default: insta_catchy_reel)")
     parser.add_argument("-f", "--footage", type=str,
@@ -120,7 +318,7 @@ def main():
 
     # Grading & audio
     parser.add_argument("--lut", type=str, default=None, help="3D LUT filename or 'none'")
-    parser.add_argument("--grade", type=str, default=None, help="Tone curve preset (summer_vibrant, culinary_warm, clean_landscape, moody_contrast)")
+    parser.add_argument("--grade", type=str, default=None, help="Tone curve preset (summer_vibrant, culinary_warm, clean_landscape, moody_contrast, odyssey)")
     parser.add_argument("--music", type=str, default=None, help="Background music filename (in bg_music/) or path")
     parser.add_argument("--sfx", type=str, default=None, help="SFX audio filename (in bg_music/) or path")
 
@@ -179,8 +377,28 @@ def main():
         subprocess.run([sys.executable, str(WORKSPACE_ROOT / "download_audio_library.py")], check=True)
         return
 
+    # 1. Project Recipe Execution Mode
+    if args.projects:
+        for proj_pattern in args.projects:
+            # Expand globs if any
+            matched = list(Path.cwd().glob(proj_pattern)) or [Path(proj_pattern)]
+            for proj_path in matched:
+                try:
+                    cfg = load_project_file(proj_path)
+                    if args.dry_run:
+                        validate_project(cfg)
+                    else:
+                        render_project(cfg, args)
+                except Exception as e:
+                    print(f"❌ Failed processing project '{proj_path}': {e}", file=sys.stderr)
+                    import traceback
+                    traceback.print_exc()
+                    sys.exit(1)
+        return
+
+    # 2. Ad-hoc CLI Flags Execution Mode
     if not args.footage:
-        parser.error("The --footage argument is required unless using --list-presets, --list-luts, --list-music, --list-sfx, --download-audio, or --info.")
+        parser.error("Must supply either --project / -c <recipe.yaml> or --footage <dir>.")
 
     footage_path = Path(args.footage).resolve()
     if not footage_path.exists():

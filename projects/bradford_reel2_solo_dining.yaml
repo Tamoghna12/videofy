@@ -1,0 +1,58 @@
+name: "Bradford Reel 2: Solo Dining & Evening Reset"
+preset: "cinematic_landscape"
+title: "SOLO DINING & EVENING RESET"
+subtitle: "WINDOW VIEWS & SLOW TRAVEL • BRADFORD"
+outro_title: "SLOW TRAVEL JOURNAL"
+outro_subtitle: "Savoring every quiet moment 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "01_raw_footage/bradford"
+output_file: "edit/cinematic_16x9/bradford_reel2_solo_dining.mp4"
+qc_file: "edit/verify/qc_sheet_bradford_reel2.png"
+
+grade: "culinary_warm"
+lut: null
+music: "debussy_clair_de_lune.mp3"
+sfx: "gentle_rain_ambience.mp3"
+black_bars: true
+
+voiceover:
+  speed: 0.92
+  text: >-
+    After hours on the move, there is nothing quite like a quiet window and a moment to breathe. |
+    A warm plate, crisp greens, and the slow, comforting unwinding of a long travel day. |
+    No rush, no itinerary... just the simple comfort of watching dusk settle over the city.
+
+shots:
+  - file: "DJI_20260723195704_0275_D.MP4"
+    start: 1.5
+    end: 5.5
+    caption: "Golden afternoon light by the window"
+  - file: "DJI_20260723200841_0277_D.MP4"
+    start: 2.0
+    end: 5.5
+    caption: "Taking time to pause and slow down"
+  - file: "DJI_20260723202023_0278_D.MP4"
+    start: 508.0
+    end: 513.0
+    caption: "Fresh salad & grilled dinner is served"
+  - file: "DJI_20260723202023_0278_D.MP4"
+    start: 630.0
+    end: 634.5
+    caption: "The best feeling after a day of travel"
+  - file: "DJI_20260723202023_0278_D.MP4"
+    start: 750.0
+    end: 755.0
+    caption: "Quiet comfort & delicious food"
+  - file: "DJI_20260723202023_0278_D.MP4"
+    start: 1110.0
+    end: 1114.5
+    caption: "A cold refreshing drink to finish"
+  - file: "DJI_20260723202023_0278_D.MP4"
+    start: 1228.0
+    end: 1233.0
+    caption: "Watching dusk settle over the city"
+  - file: "DJI_20260723214931_0284_D.MP4"
+    start: 1.5
+    end: 5.5
+    caption: "Goodnight Bradford"

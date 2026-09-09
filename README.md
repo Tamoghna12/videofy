@@ -92,7 +92,60 @@ python3 render_template.py --list-sfx
 python3 render_template.py --download-audio
 ```
 
-### 4. 1-Click Rendering Commands
+### 4. Declarative Project Recipes (Recommended for 100% Reproducibility)
+
+Instead of passing dozens of CLI flags or writing ad-hoc Python scripts, define your videos as declarative **YAML recipes** in the `projects/` directory:
+
+```bash
+# Validate project configuration, shot timing, and media paths without rendering
+python3 render_template.py --project projects/loughborough_campus_journey.yaml --validate
+
+# Render the complete film with GPU acceleration, letterbox frames, and voiceover
+python3 render_template.py --project projects/loughborough_campus_journey.yaml
+
+# Batch render multiple projects simultaneously
+python3 render_template.py --project projects/bradford_*.yaml
+```
+
+#### Example Project Recipe (`projects/loughborough_campus_journey.yaml`):
+```yaml
+name: "Loughborough University Campus Journey"
+preset: "cinematic_landscape"
+title: "LOUGHBOROUGH UNIVERSITY"
+subtitle: "LEICESTERSHIRE • CAMPUS WALK"
+outro_title: "LOUGHBOROUGH UNIVERSITY"
+outro_subtitle: "Where Passion Shapes the Future 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "01_raw_footage/lboro_university"
+output_file: "edit/cinematic_16x9/lboro_university_campus_journey.mp4"
+qc_file: "edit/verify/qc_sheet_lboro_journey.png"
+
+grade: "odyssey"     # 2001: A Space Odyssey 70mm balanced filmic look
+music: "beethoven_symphony_no6_pastoral.mp3"
+sfx: "forest_birds_wind.mp3"
+black_bars: true
+
+voiceover:
+  speed: 0.91
+  text: >-
+    There is a quiet clarity in the morning air when you start walking towards campus... |
+    Passing down Epinal Way, you are greeted by Loughborough University...
+
+shots:
+  - file: "DJI_20251027141310_0022_D.MP4"
+    start: 0.5
+    end: 6.0
+    caption: "MORNING COMMUTE // LEICESTERSHIRE APPROACH"
+  - file: "DJI_20251027142035_0025_D.MP4"
+    start: 0.5
+    end: 9.5
+    caption: "LOUGHBOROUGH UNIVERSITY // MAIN GATEWAY"
+```
+
+---
+
+### 5. Ad-hoc CLI Flag Rendering Commands
 
 ```bash
 # Render an Instagram Catchy Reel with AI Beat-Sync & GPU Acceleration
