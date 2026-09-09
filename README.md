@@ -34,7 +34,14 @@
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start & Multi-Device Setup
+
+Clone the repository to any machine (Linux, macOS, Windows with WSL2):
+
+```bash
+git clone https://github.com/Tamoghna12/videofy.git
+cd videofy
+```
 
 ### 1. Prerequisites
 
@@ -47,13 +54,25 @@ sudo apt update && sudo apt install -y ffmpeg fonts-liberation
 # macOS
 brew install ffmpeg
 
-# Install Python requirements
+# Install Core Python Dependencies
 pip install -r requirements.txt
 ```
 
-### 2. Check System Hardware Acceleration
+### 2. (Optional) Intel Arc GPU Acceleration (XPU)
 
-Check your active GPU encoder and supported hardware:
+If running on an **Intel Arc GPU** (e.g. Arc A770, A750, A380, B580, or Intel Core Ultra Arc integrated graphics):
+
+```bash
+# Install Intel Level-Zero compute runtime
+sudo apt install -y intel-opencl-icd intel-level-zero-gpu
+
+# Install PyTorch with native Intel XPU support
+pip install torch torchvision --index-url https://download.pytorch.org/whl/xpu
+```
+
+### 3. Check System Hardware Acceleration
+
+Check your active GPU encoder, hardware acceleration, and voiceover engine:
 
 ```bash
 python3 render_template.py --info
@@ -73,7 +92,7 @@ Example output:
 ======================================================================
 ```
 
-### 3. Inspect Available Presets & 3D LUTs
+### 4. Inspect Available Presets & 3D LUTs
 
 ```bash
 # List all built-in video presets
@@ -92,7 +111,7 @@ python3 render_template.py --list-sfx
 python3 render_template.py --download-audio
 ```
 
-### 4. Declarative Project Recipes (Recommended for 100% Reproducibility)
+### 5. Declarative Project Recipes (Recommended for 100% Reproducibility)
 
 Instead of passing dozens of CLI flags or writing ad-hoc Python scripts, define your videos as declarative **YAML recipes** in the `projects/` directory:
 
@@ -145,7 +164,7 @@ shots:
 
 ---
 
-### 5. Ad-hoc CLI Flag Rendering Commands
+### 6. Ad-hoc CLI Flag Rendering Commands
 
 ```bash
 # Render an Instagram Catchy Reel with AI Beat-Sync & GPU Acceleration
@@ -307,6 +326,14 @@ Videofy organizes the video editing lifecycle into an intuitive 4-step productio
 ```
 videofy/
 │
+├── projects/                                # [DECLARATIVE RECIPES (100% REPRODUCIBLE)]
+│   ├── loughborough_campus_journey.yaml     # 99.5s 16:9 film, 14 shots, Odyssey 70mm, Beethoven Pastoral
+│   ├── bradford_reel1_the_journey.yaml      # Yorkshire train commute & Victorian arches
+│   ├── bradford_reel2_solo_dining.yaml      # Window views, slow dining & evening reset
+│   ├── bradford_reel3_city_hall_twilight.yaml # City Hall & 220-ft clock tower at dusk
+│   ├── castlerock_causeway_coast.yaml       # Wild Antrim coast & sand dunes
+│   └── dunluce_castle.yaml                  # 1500 cliffside fortress ruins
+│
 ├── 01_raw_footage/ -> raw_footage/          # [STEP 1: INGESTION]
 │   ├── bradford/                            # 4K Yorkshire city footage
 │   ├── Northern Ireland/                    # Causeway Coast, Dunluce Castle, Castlerock
@@ -317,6 +344,7 @@ videofy/
 │
 ├── 02_assets/ -> assets/                    # [STEP 2: CREATIVE ASSETS]
 │   ├── audio/                               # Open-Source Audio Suite
+│   │   ├── voice/                           # Bundled reference voice audio (tee_voice_16k.wav)
 │   │   ├── manifest.json                    # Machine-readable metadata, BPM & licenses
 │   │   ├── AUDIO_LICENSES.md                # Full legal attribution guide
 │   │   ├── sfx/                             # 18 Studio-grade SFX (transitions, foley_ui, ambience)
@@ -325,12 +353,12 @@ videofy/
 │   └── photos/                              # Photography assets (Whitby, York, Scarboro)
 │
 ├── 03_engine/ -> video_templates/           # [STEP 3: PRODUCTION ENGINE]
-│   ├── render_template.py                   # Unified CLI runner (--list-music, --list-sfx, etc.)
+│   ├── render_template.py                   # Unified CLI runner (-c/--project, --validate, etc.)
 │   ├── download_audio_library.py            # Automated procedural audio & SFX synthesizer
 │   ├── video_templates/                     # Core templating package
-│   │   ├── core/                            # GPU accel, AI beat-sync, smart crop, conformer, audio
+│   │   ├── core/                            # Qwen-TTS (XPU/CUDA), AI beat-sync, smart crop, conformer, audio
 │   │   └── presets/                         # insta_catchy_reel, cinematic_landscape, lifestyle_vlog
-│   └── requirements.txt                     # Dependencies (Pillow, numpy, scipy, librosa, opencv)
+│   └── requirements.txt                     # Dependencies (Pillow, numpy, scipy, librosa, opencv, PyYAML, faster-whisper)
 │
 ├── 04_deliverables/ -> edit/                # [STEP 4: FINISHED DELIVERABLES & QC]
 │   ├── reels_9x16/                          # Rendered vertical portrait reels (1080x1920)
@@ -352,6 +380,7 @@ Over 250 industry-standard 3D `.cube` LUTs are organized under `assets/luts/`:
 - **Film Emulation**: `Rec709 Kodak 2383 D65.cube`, `Fujifilm 3513DI`, `Filmic Resolve`
 - **Creative Travel**: `CINECOLOR_GOLDEN_HOUR.CUBE`, `Summer_Vibes`, `Teal_and_Orange`
 - **Calibrated Built-In Curves**:
+  - `odyssey`: Balanced 70mm *2001: A Space Odyssey* aesthetic (Eastman 5254 look: unclipped highlight rolloff, clean neutral midtones, subtle shadow cooling, and contrast-adaptive sharpening).
   - `summer_vibrant`: S-curve boost with +14% saturation and lifted midtones.
   - `culinary_warm`: Warm gamma lift and gentle contrast for food & interiors.
   - `clean_landscape`: High clarity, preserved natural blues and greens.
