@@ -6,6 +6,7 @@ kinetic subtitles and spaced narrative timing across the video timeline.
 """
 
 import os
+import sys
 import re
 import json
 import subprocess
@@ -14,14 +15,31 @@ import numpy as np
 import scipy.io.wavfile as wavfile
 from pathlib import Path
 
-KITTEN_PYTHON = Path("/home/tamoghna/anaconda3/envs/kitten/bin/python")
-SCIENCE_VIDS_DIR = Path("/home/tamoghna/Documents/sci_tech/science_vids")
-DEFAULT_REF_AUDIO = SCIENCE_VIDS_DIR / "assets" / "tee_voice_16k.wav"
+WORKSPACE_ROOT = Path(__file__).resolve().parent.parent.parent
+DEFAULT_REF_AUDIO = WORKSPACE_ROOT / "assets" / "audio" / "voice" / "tee_voice_16k.wav"
+
+
+def get_voiceover_python() -> Path:
+    """Resolve the python interpreter capable of running Qwen-TTS and faster-whisper."""
+    env_py = os.environ.get("VOICEOVER_PYTHON")
+    if env_py and Path(env_py).is_file():
+        return Path(env_py)
+    candidates = [
+        Path.home() / "anaconda3/envs/kitten/bin/python",
+        Path.home() / "miniconda3/envs/kitten/bin/python",
+        Path("/home/tamoghna/anaconda3/envs/kitten/bin/python"),
+        Path(sys.executable),
+    ]
+    for cand in candidates:
+        if cand.is_file():
+            return cand
+    return Path(sys.executable)
 
 
 def is_voiceover_available() -> bool:
     """Check if the local voice cloning environment and voice sample are available."""
-    return KITTEN_PYTHON.is_file() and DEFAULT_REF_AUDIO.is_file()
+    py = get_voiceover_python()
+    return py.is_file() and DEFAULT_REF_AUDIO.is_file()
 
 
 def get_audio_duration(audio_path: Path) -> float:
@@ -133,8 +151,8 @@ def generate_spaced_story_voiceover(
 
     runner_code = f"""
 import sys, os, json
-sys.path.append({json.dumps(str(SCIENCE_VIDS_DIR))})
-from core.qwen_tts_service import QwenTTSService
+sys.path.append({json.dumps(str(WORKSPACE_ROOT))})
+from video_templates.core.qwen_tts_service import QwenTTSService
 from faster_whisper import WhisperModel
 
 with open({json.dumps(str(tmp_json_req))}) as f:
@@ -195,9 +213,10 @@ print("SPACED_SYNTHESIS_SUCCESS")
     for k in ["CONDA_PREFIX", "CONDA_DEFAULT_ENV", "CONDA_PROMPT_MODIFIER", "PYTHONPATH"]:
         env.pop(k, None)
 
+    py_bin = get_voiceover_python()
     try:
         subprocess.run(
-            [str(KITTEN_PYTHON), "-c", runner_code],
+            [str(py_bin), "-c", runner_code],
             env=env,
             capture_output=True,
             text=True,
@@ -343,16 +362,17 @@ def generate_voiceover(
     reference_audio: Path = None
 ) -> dict:
     """Synthesize a single voiceover audio clip with zero-shot cloned voice."""
+    py_bin = get_voiceover_python()
     if not is_voiceover_available():
-        raise RuntimeError(f"Voiceover environment not ready: {KITTEN_PYTHON}")
+        raise RuntimeError(f"Voiceover environment not ready: {py_bin}")
     ref_audio = Path(reference_audio) if reference_audio else DEFAULT_REF_AUDIO
     output_path = Path(output_path).resolve()
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     runner_code = f"""
 import sys, os
-sys.path.append({json.dumps(str(SCIENCE_VIDS_DIR))})
-from core.qwen_tts_service import QwenTTSService
+sys.path.append({json.dumps(str(WORKSPACE_ROOT))})
+from video_templates.core.qwen_tts_service import QwenTTSService
 service = QwenTTSService(reference_audio={json.dumps(str(ref_audio))}, speed={float(speed)})
 service.generate_from_text({json.dumps(text)}, path={json.dumps(str(output_path))})
 """
@@ -361,7 +381,7 @@ service.generate_from_text({json.dumps(text)}, path={json.dumps(str(output_path)
         env.pop(k, None)
 
     subprocess.run(
-        [str(KITTEN_PYTHON), "-c", runner_code],
+        [str(py_bin), "-c", runner_code],
         env=env,
         capture_output=True,
         text=True,
