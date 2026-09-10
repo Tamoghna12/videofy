@@ -1,0 +1,50 @@
+name: "Bradford: Twilight in Centenary Square (Advanced Widescreen)"
+preset: "cinematic_landscape"
+title: "CENTENARY SQUARE"
+subtitle: "BRADFORD BY TWILIGHT"
+outro_title: "CENTENARY SQUARE"
+outro_subtitle: "Bradford City Park • Illuminated Fountains 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "01_raw_footage/bradford"
+output_file: "edit/cinematic_16x9/bradford_centenary_twilight.mp4"
+qc_file: "edit/verify/qc_sheet_bradford_centenary_twilight.png"
+
+grade: "odyssey"
+lut: null
+music: "can_you_hear_the_music.mp3"
+sfx: "church_bells_cathedral.mp3"
+black_bars: true
+beat_sync: true
+max_duration: 60.0
+
+voiceover:
+  speed: 0.92
+  text: >-
+    As dusk settles over Yorkshire, Bradford transforms beneath the evening sky. |
+    At the heart of the city lies Centenary Square, centered around the 220-foot clock tower of City Hall. |
+    Modeled on the Palazzo Vecchio of Florence, its Venetian gothic arches glow in warm amber light. |
+    Across the mirror pool, mist fountains rise and fall as twilight envelopes the piazza. |
+    When night finally falls, the city reveals its most poetic and serene hour.
+
+shots:
+  - file: "DJI_20260723204601_0280_D.MP4"
+    start: 1.0
+    end: 8.5
+    caption: "CENTENARY SQUARE // DUSK DESCENT"
+  - file: "DJI_20260723205102_0281_D.MP4"
+    start: 1.0
+    end: 8.0
+    caption: "CITY HALL CLOCK TOWER // VENETIAN GOTHIC"
+  - file: "DJI_20260723205159_0282_D.MP4"
+    start: 0.5
+    end: 7.5
+    caption: "MIRROR POOL // ILLUMINATED FOUNTAINS"
+  - file: "DJI_20260723205446_0283_D.MP4"
+    start: 1.0
+    end: 9.0
+    caption: "CITY PARK REFLECTIONS // NIGHT DESCENDS"
+  - file: "DJI_20260723214931_0284_D.MP4"
+    start: 0.5
+    end: 7.5
+    caption: "NIGHTFALL IN THE CITY // SILENT ARCHES"

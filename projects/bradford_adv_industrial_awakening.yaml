@@ -1,0 +1,62 @@
+name: "Bradford: Industrial & Gothic Awakening (Advanced Widescreen)"
+preset: "cinematic_landscape"
+title: "BRADFORD"
+subtitle: "YORKSHIRE'S INDUSTRIAL HEART"
+outro_title: "BRADFORD, WEST YORKSHIRE"
+outro_subtitle: "City of Culture • Wool Capital of the World 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "01_raw_footage/bradford"
+output_file: "edit/cinematic_16x9/bradford_industrial_awakening.mp4"
+qc_file: "edit/verify/qc_sheet_bradford_industrial_awakening.png"
+
+grade: "odyssey"
+lut: null
+music: "mozart_symphony_no25_allegro_con_brio.mp3"
+sfx: "train_rolling_ambience.mp3"
+black_bars: true
+beat_sync: true
+max_duration: 65.0
+
+voiceover:
+  speed: 0.92
+  text: >-
+    Stepping off the train into Bradford, you immediately sense the weight of centuries. |
+    Rising from the valleys of West Yorkshire, this city grew from a quiet wool trading town into the textile capital of the world. |
+    Look closely at the magnificent Victorian sandstone, carved with gothic spires and towering arches that carried the industrial revolution forward. |
+    Through every alleyway and stone facade in Little Germany, the echoes of Victorian merchants and master craftspeople still linger. |
+    An enduring testament to grit, architectural grandeur, and Yorkshire heritage.
+
+shots:
+  - file: "DJI_20260531141209_0261_D.MP4"
+    start: 1.0
+    end: 7.0
+    caption: "YORKSHIRE APPROACH // ROLLING INTO BRADFORD"
+  - file: "DJI_20260723171555_0262_D.MP4"
+    start: 0.5
+    end: 6.5
+    caption: "BRADFORD INTERCHANGE // TERMINUS ARRIVAL"
+  - file: "DJI_20260723171641_0264_D.MP4"
+    start: 0.5
+    end: 6.0
+    caption: "STATION WALKWAY // URBAN CORRIDOR"
+  - file: "DJI_20260723171744_0265_D.MP4"
+    start: 0.5
+    end: 7.5
+    caption: "VICTORIAN VIADUCT // 1850 RAILWAY ARCHES"
+  - file: "DJI_20260723171945_0266_D.MP4"
+    start: 0.5
+    end: 7.5
+    caption: "BRIDGE STREET // CANAL ROAD INTERSECTION"
+  - file: "DJI_20260723173540_0270_D.MP4"
+    start: 1.0
+    end: 9.0
+    caption: "LITTLE GERMANY // 19TH CENTURY WAREHOUSES"
+  - file: "DJI_20260723174010_0271_D.MP4"
+    start: 0.5
+    end: 7.5
+    caption: "SANDSTONE FACADES // TEXTILE MERCHANTS' PRECINCT"
+  - file: "DJI_20260723180626_0272_D.MP4"
+    start: 1.0
+    end: 8.5
+    caption: "GOTHIC REVIVAL // HISTORIC CITY CORE"

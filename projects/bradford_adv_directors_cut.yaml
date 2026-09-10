@@ -1,0 +1,83 @@
+name: "Bradford: The Complete Journey (Director's Cut)"
+preset: "cinematic_landscape"
+title: "BRADFORD: THE JOURNEY"
+subtitle: "DIRECTOR'S CUT • 4K WIDESCREEN"
+outro_title: "BRADFORD, WEST YORKSHIRE"
+outro_subtitle: "Industrial Heritage • Yorkshire Spirit 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "01_raw_footage/bradford"
+output_file: "edit/cinematic_16x9/bradford_directors_cut.mp4"
+qc_file: "edit/verify/qc_sheet_bradford_directors_cut.png"
+
+grade: "odyssey"
+lut: null
+music: "beethoven_symphony_no6_pastoral.mp3"
+sfx: "train_rolling_ambience.mp3"
+black_bars: true
+beat_sync: true
+max_duration: 100.0
+
+voiceover:
+  speed: 0.92
+  text: >-
+    Travelling across Yorkshire by rail, there is a quiet anticipation as the tracks weave towards Bradford Interchange. |
+    Stepping out beneath the massive Victorian railway viaducts, you feel the industrial pulse that shaped northern England. |
+    In Little Germany, monumental stone warehouses and narrow streets stand just as they did over a century ago. |
+    Taking time to rest and observe the city from above, watching life move through the urban landscape. |
+    As evening falls, Centenary Square comes alive with glowing fountains and the timeless silhouette of City Hall. |
+    A journey through history, architecture, and enduring Yorkshire character. Until next time.
+
+shots:
+  - file: "DJI_20260531141209_0261_D.MP4"
+    start: 1.0
+    end: 7.0
+    caption: "YORKSHIRE APPROACH // ROLLING INTO BRADFORD"
+  - file: "DJI_20260723171555_0262_D.MP4"
+    start: 0.5
+    end: 6.5
+    caption: "BRADFORD INTERCHANGE // TERMINUS ARRIVAL"
+  - file: "DJI_20260723171641_0264_D.MP4"
+    start: 0.5
+    end: 6.0
+    caption: "STATION WALKWAY // URBAN CORRIDOR"
+  - file: "DJI_20260723171744_0265_D.MP4"
+    start: 0.5
+    end: 7.5
+    caption: "VICTORIAN VIADUCT // 1850 RAILWAY ARCHES"
+  - file: "DJI_20260723173540_0270_D.MP4"
+    start: 1.0
+    end: 8.5
+    caption: "LITTLE GERMANY // 19TH CENTURY WAREHOUSES"
+  - file: "DJI_20260723174010_0271_D.MP4"
+    start: 0.5
+    end: 7.5
+    caption: "TEXTILE MERCHANTS' QUARTER // SANDSTONE STREETS"
+  - file: "DJI_20260723180626_0272_D.MP4"
+    start: 1.0
+    end: 8.5
+    caption: "GOTHIC REVIVAL // HISTORIC CITY CORE"
+  - file: "DJI_20260723195704_0275_D.MP4"
+    start: 0.5
+    end: 7.0
+    caption: "WINDOW OUTLOOK // EVENING RESET"
+  - file: "DJI_20260723200841_0277_D.MP4"
+    start: 0.5
+    end: 7.0
+    caption: "URBAN PERSPECTIVE // BRADFORD SKYLINE"
+  - file: "DJI_20260723204601_0280_D.MP4"
+    start: 1.0
+    end: 8.0
+    caption: "CENTENARY SQUARE // DUSK SETTLES"
+  - file: "DJI_20260723205102_0281_D.MP4"
+    start: 1.0
+    end: 8.0
+    caption: "CITY HALL CLOCK TOWER // ILLUMINATED GOTHIC"
+  - file: "DJI_20260723205159_0282_D.MP4"
+    start: 0.5
+    end: 7.5
+    caption: "MIRROR POOL // ILLUMINATED FOUNTAINS"
+  - file: "DJI_20260723205446_0283_D.MP4"
+    start: 1.0
+    end: 8.5
+    caption: "CITY PARK REFLECTIONS // NIGHT DESCENDS"

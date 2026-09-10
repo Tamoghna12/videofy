@@ -15,6 +15,7 @@ from ..core.overlays import build_timeline_overlays
 from ..core.audio import resolve_audio, build_audio_filter
 from ..core.accel import get_encoder_args
 from ..core.qc import generate_contact_sheet
+from ..core.beat_sync import detect_beats, snap_timeline_to_beats
 from ..core.voiceover import generate_voiceover, generate_spaced_story_voiceover, is_voiceover_available
 from ..mcp_bridge import validate_deliverable
 
@@ -35,6 +36,7 @@ def render(
     max_duration=60.0,
     video_clip_duration=5.5,
     accel="auto",
+    beat_sync=False,
     smart_crop=False,
     voiceover_text=None,
     voiceover_speed=0.92,
@@ -56,8 +58,20 @@ def render(
     shot_voiceover_starts = []
     curr_total = 0.0
 
+    # Resolve audio & optional beat transients for musical synchronization
+    music_file = resolve_audio(music_track) or resolve_audio("experience_einaudi.mp3")
+    waves_file = resolve_audio(sfx_track, is_sfx=True) or resolve_audio("ocean_waves_crashing.mp3", is_sfx=True)
+
+    detected_beats = []
+    if beat_sync and music_file:
+        print("🎵 Analyzing audio rhythm and downbeats for widescreen cinematic cuts...")
+        beat_info = detect_beats(music_file, duration=max_duration)
+        detected_beats = beat_info.get("beats", [])
+        print(f"   Detected {len(detected_beats)} beat transients (Estimated {beat_info.get('tempo_estimate_bpm')} BPM)")
+
     if shots:
-        # Use curated shot sequence
+        # 1. Parse curated shot sequence
+        parsed_shots = []
         for i, shot in enumerate(shots):
             if isinstance(shot, dict):
                 fn = shot.get("file") or shot.get("filename") or shot.get("path")
@@ -75,7 +89,6 @@ def render(
             
             src_path = footage_dir / fn if not Path(fn).is_absolute() else Path(fn)
             if not src_path.is_file():
-                # Try matching by filename inside footage_dir
                 matches = list(footage_dir.glob(f"**/{src_path.name}"))
                 if matches:
                     src_path = matches[0]
@@ -83,19 +96,40 @@ def render(
                     print(f"⚠️ Warning: shot file not found {fn}, skipping...")
                     continue
             
-            dur = et - st
+            parsed_shots.append({
+                "src_path": src_path,
+                "start": float(st),
+                "end": float(et),
+                "caption": cap,
+                "raw_dur": float(et - st),
+                "vox": vox,
+                "voiceover_lead": float(shot.get("voiceover_lead", 0.5)) if isinstance(shot, dict) else 0.5
+            })
+
+        # Snap curated shot cuts to musical beats if enabled
+        if beat_sync and detected_beats and parsed_shots:
+            raw_durs = [s["raw_dur"] for s in parsed_shots]
+            snapped_durs, _ = snap_timeline_to_beats(raw_durs, detected_beats)
+            for s, s_dur in zip(parsed_shots, snapped_durs):
+                s["end"] = s["start"] + s_dur
+                s["dur"] = s_dur
+        else:
+            for s in parsed_shots:
+                s["dur"] = s["raw_dur"]
+
+        for i, s in enumerate(parsed_shots):
+            dur = s["dur"]
             shot_start = curr_total
-            if vox:
-                lead = float(shot.get("voiceover_lead", 0.5)) if isinstance(shot, dict) else 0.5
-                shot_voiceovers.append(vox.strip())
-                shot_voiceover_starts.append(shot_start + lead)
+            if s.get("vox"):
+                shot_voiceovers.append(s["vox"].strip())
+                shot_voiceover_starts.append(shot_start + s.get("voiceover_lead", 0.5))
 
             seg_out = tmp_dir / f"seg_{i:02d}.mp4"
             if not (seg_out.is_file() and seg_out.stat().st_size > 100000):
                 conform_clip(
-                    src_path,
-                    start=st,
-                    end=et,
+                    s["src_path"],
+                    start=s["start"],
+                    end=s["end"],
                     out_path=seg_out,
                     target_res="1920x1080",
                     fps=24,
@@ -105,7 +139,7 @@ def render(
                     smart_crop=smart_crop
                 )
             timeline_segments.append(seg_out)
-            shot_captions.append((dur, cap))
+            shot_captions.append((dur, s["caption"]))
             curr_total += dur
             if max_duration and curr_total >= max_duration:
                 break
@@ -114,12 +148,25 @@ def render(
         if not vids:
             raise ValueError(f"No video files found in {footage_dir}")
 
+        planned_vids = []
+        raw_durations = []
+        temp_total = 0.0
         v_idx = 0
-        seg_counter = 0
-        while curr_total < max_duration and v_idx < len(vids):
+        while temp_total < max_duration and v_idx < len(vids):
             v_path = vids[v_idx]
+            dur = min(video_clip_duration, max_duration - temp_total)
+            planned_vids.append(v_path)
+            raw_durations.append(dur)
+            temp_total += dur
+            v_idx += 1
+
+        if beat_sync and detected_beats:
+            planned_durations, _ = snap_timeline_to_beats(raw_durations, detected_beats)
+        else:
+            planned_durations = raw_durations
+
+        for seg_counter, (v_path, dur) in enumerate(zip(planned_vids, planned_durations)):
             seg_out = tmp_dir / f"seg_{seg_counter:02d}.mp4"
-            dur = min(video_clip_duration, max_duration - curr_total)
             conform_clip(
                 v_path,
                 start=1.5,
@@ -135,8 +182,8 @@ def render(
             timeline_segments.append(seg_out)
             shot_captions.append((dur, f"Scene {seg_counter+1:02d}"))
             curr_total += dur
-            v_idx += 1
-            seg_counter += 1
+            if max_duration and curr_total >= max_duration:
+                break
 
     # Concatenate
     concat_txt = tmp_dir / "concat_list.txt"
