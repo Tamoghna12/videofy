@@ -1,0 +1,83 @@
+name: "Bradford: Architectural Masterpiece (With Narrative Voiceover)"
+preset: "cinematic_landscape"
+title: "BRADFORD"
+subtitle: "A VICTORIAN ARCHITECTURAL MASTERPIECE"
+outro_title: "BRADFORD, WEST YORKSHIRE"
+outro_subtitle: "City of Culture • Historic Sandstone Heritage 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "01_raw_footage/bradford"
+output_file: "edit/cinematic_16x9/bradford_architectural_story.mp4"
+qc_file: "edit/verify/qc_sheet_bradford_architectural_story.png"
+
+grade: "clean_landscape"
+lut: "Rec709 Kodak 2383 D65.cube"
+music: "can_you_hear_the_music.mp3"
+sfx: "church_bells_cathedral.mp3"
+black_bars: true
+beat_sync: true
+max_duration: 50.0
+
+voiceover:
+  speed: 1.02
+
+shots:
+  - file: "DJI_20260723171641_0264_D.MP4"
+    start: 0.5
+    end: 5.5
+    caption: "BRADFORD INTERCHANGE // 1850 RAILWAY VIADUCT"
+    voiceover: "Beneath the towering Victorian viaduct arches of Bradford Interchange."
+    voiceover_lead: 0.5
+
+  - file: "DJI_20260723173540_0270_D.MP4"
+    start: 22.0
+    end: 26.5
+    caption: "LITTLE GERMANY // 19TH CENTURY WOOL WAREHOUSES"
+
+  - file: "DJI_20260723173540_0270_D.MP4"
+    start: 31.5
+    end: 36.5
+    caption: "MERCHANT PRECINCT // ASHLAR SANDSTONE FACADES"
+    voiceover: "In Little Germany, grand nineteenth-century wool warehouses line the cobbled streets."
+    voiceover_lead: 0.5
+
+  - file: "DJI_20260723174010_0271_D.MP4"
+    start: 2.0
+    end: 6.5
+    caption: "GOTHIC REVIVAL // ORNATE CORNICES & ARCHES"
+    voiceover: "Ornate Venetian Gothic stonework reflecting the heights of Yorkshire craftsmanship."
+    voiceover_lead: 0.5
+
+  - file: "DJI_20260723174010_0271_D.MP4"
+    start: 7.0
+    end: 11.5
+    caption: "VICTORIAN CIVIC HERITAGE // HISTORIC CITY CORE"
+
+  - file: "DJI_20260723205102_0281_D.MP4"
+    start: 5.0
+    end: 9.5
+    caption: "CITY PARK PROMENADE // APPROACHING CENTENARY SQUARE"
+
+  - file: "DJI_20260723205159_0282_D.MP4"
+    start: 4.0
+    end: 8.5
+    caption: "CENTENARY SQUARE // CIVIC PIAZZA"
+
+  - file: "DJI_20260723205446_0283_D.MP4"
+    start: 1.5
+    end: 6.5
+    caption: "BRADFORD CITY HALL // TUSCAN GOTHIC FAÇADE (1873)"
+    voiceover: "Centenary Square, framed by the grand facade and two hundred foot clock tower of City Hall."
+    voiceover_lead: 0.5
+
+  - file: "DJI_20260723205446_0283_D.MP4"
+    start: 6.5
+    end: 11.5
+    caption: "THE FLORENTINE TOWER // 220-FOOT CAMPANILE"
+
+  - file: "DJI_20260723205446_0283_D.MP4"
+    start: 15.0
+    end: 20.5
+    caption: "MARKET STREET // GOLDEN HOUR OVER YORKSHIRE"
+    voiceover: "A timeless northern city shaped by sandstone, heritage, and ambition."
+    voiceover_lead: 0.5
