@@ -1,0 +1,61 @@
+name: "Bradford: Architectural Masterpiece (Pure 4K Cinematic)"
+preset: "cinematic_landscape"
+title: "BRADFORD"
+subtitle: "A VICTORIAN ARCHITECTURAL MASTERPIECE"
+outro_title: "BRADFORD, WEST YORKSHIRE"
+outro_subtitle: "City of Culture • Historic Sandstone Heritage 📍"
+handle: "@tamoghna.travels"
+
+footage_dir: "01_raw_footage/bradford"
+output_file: "edit/cinematic_16x9/bradford_architectural_cinematic.mp4"
+qc_file: "edit/verify/qc_sheet_bradford_architectural_cinematic.png"
+
+grade: "clean_landscape"
+lut: "Rec709 Kodak 2383 D65.cube"
+music: "can_you_hear_the_music.mp3"
+sfx: "church_bells_cathedral.mp3"
+black_bars: true
+beat_sync: true
+max_duration: 45.0
+
+shots:
+  - file: "DJI_20260723171641_0264_D.MP4"
+    start: 1.0
+    end: 4.5
+    caption: "BRADFORD INTERCHANGE // 1850 RAILWAY VIADUCT"
+  - file: "DJI_20260723173540_0270_D.MP4"
+    start: 23.0
+    end: 27.0
+    caption: "LITTLE GERMANY // 19TH CENTURY WOOL WAREHOUSES"
+  - file: "DJI_20260723173540_0270_D.MP4"
+    start: 32.0
+    end: 36.0
+    caption: "MERCHANT PRECINCT // ASHLAR SANDSTONE FACADES"
+  - file: "DJI_20260723174010_0271_D.MP4"
+    start: 2.0
+    end: 6.0
+    caption: "GOTHIC REVIVAL // ORNATE CORNICES & ARCHES"
+  - file: "DJI_20260723174010_0271_D.MP4"
+    start: 6.5
+    end: 10.5
+    caption: "VICTORIAN CIVIC HERITAGE // HISTORIC CITY CORE"
+  - file: "DJI_20260723205102_0281_D.MP4"
+    start: 5.0
+    end: 9.0
+    caption: "CITY PARK PROMENADE // APPROACHING CENTENARY SQUARE"
+  - file: "DJI_20260723205159_0282_D.MP4"
+    start: 4.0
+    end: 8.0
+    caption: "CENTENARY SQUARE // CIVIC PIAZZA"
+  - file: "DJI_20260723205446_0283_D.MP4"
+    start: 1.5
+    end: 6.0
+    caption: "BRADFORD CITY HALL // TUSCAN GOTHIC FAÇADE (1873)"
+  - file: "DJI_20260723205446_0283_D.MP4"
+    start: 6.0
+    end: 10.5
+    caption: "THE FLORENTINE TOWER // 220-FOOT CAMPANILE"
+  - file: "DJI_20260723205446_0283_D.MP4"
+    start: 15.0
+    end: 19.5
+    caption: "MARKET STREET // GOLDEN HOUR OVER YORKSHIRE"
