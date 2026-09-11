@@ -332,7 +332,8 @@ videofy/
 │   ├── bradford_reel2_solo_dining.yaml      # Window views, slow dining & evening reset
 │   ├── bradford_reel3_city_hall_twilight.yaml # City Hall & 220-ft clock tower at dusk
 │   ├── castlerock_causeway_coast.yaml       # Wild Antrim coast & sand dunes
-│   └── dunluce_castle.yaml                  # 1500 cliffside fortress ruins
+│   ├── dunluce_castle.yaml                  # 1500 cliffside fortress ruins
+│   └── yorkshire_catchy_insta_reel.yaml     # 36.9s 9:16 Insta reel, Polaroid cards (Shambles, Whitby Abbey, South Bay)
 │
 ├── 01_raw_footage/ -> raw_footage/          # [STEP 1: INGESTION]
 │   ├── bradford/                            # 4K Yorkshire city footage
