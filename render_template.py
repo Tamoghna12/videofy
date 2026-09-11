@@ -161,9 +161,27 @@ def validate_project(cfg: dict) -> bool:
         missing_count = 0
         for i, s in enumerate(shots):
             if isinstance(s, dict):
+                if s.get("type") == "photo" or "photo" in s:
+                    fn = s.get("file") or s.get("path") or s.get("photo")
+                    dur = float(s.get("duration", 2.6))
+                    total_planned += dur
+                    sp = resolve_project_path(fn, cfg.get("_project_dir"))
+                    if not sp or not sp.is_file():
+                        print(f"    ⚠️ Photo #{i+1:02d} missing: {fn}")
+                        missing_count += 1
+                    continue
                 fn = s.get("file") or s.get("filename")
                 st = float(s.get("start", 0.0))
                 et = float(s.get("end", st + 5.0))
+            elif isinstance(s, (list, tuple)) and len(s) >= 2 and s[0] == "photo":
+                fn = s[1]
+                dur = float(s[5]) if len(s) > 5 else 2.6
+                total_planned += dur
+                sp = resolve_project_path(fn, cfg.get("_project_dir"))
+                if not sp or not sp.is_file():
+                    print(f"    ⚠️ Photo #{i+1:02d} missing: {fn}")
+                    missing_count += 1
+                continue
             elif len(s) >= 3:
                 fn, st, et = s[:3]
             else:

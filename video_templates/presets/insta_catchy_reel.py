@@ -60,32 +60,116 @@ def render(
     cards_dir = tmp_dir / "cards"
     cards_dir.mkdir(exist_ok=True)
 
-    # 1. Discover Media
-    vids = sorted(list(footage_dir.glob("*.mp4")) + list(footage_dir.glob("*.MP4")))
-    imgs = sorted(list(footage_dir.glob("*.jpg")) + list(footage_dir.glob("*.JPG")))
+    WORKSPACE_ROOT = Path(__file__).resolve().parent.parent.parent
+    shots = kwargs.get("shots") or kwargs.get("timeline")
 
-    if not vids:
-        raise ValueError(f"No video files found in {footage_dir}")
+    if shots:
+        actions = []
+        raw_durations = []
+        for i, item in enumerate(shots):
+            if isinstance(item, dict):
+                item_type = item.get("type", "video" if ("start" in item or "end" in item) else "photo")
+                if item_type == "photo" or "photo" in item or "image" in item:
+                    p_file = item.get("file") or item.get("path") or item.get("photo") or item.get("image")
+                    p_path = Path(p_file) if Path(p_file).is_absolute() else (WORKSPACE_ROOT / p_file if (WORKSPACE_ROOT / p_file).exists() else (footage_dir / p_file if footage_dir else Path(p_file)))
+                    c_title = item.get("title") or item.get("card_title", p_path.stem.replace("_", " "))
+                    c_sub = item.get("subtitle") or item.get("card_subtitle", subtitle)
+                    c_angle = float(item.get("angle", -2.5 if i % 2 == 0 else 2.5))
+                    c_dur = float(item.get("duration", photo_card_duration))
+                    card_png = cards_dir / f"polaroid_{i:02d}.png"
+                    create_polaroid_card(
+                        p_path,
+                        title=c_title,
+                        subtitle=c_sub,
+                        angle=c_angle,
+                        out_png=card_png,
+                        canvas_size=(1080, 1920)
+                    )
+                    actions.append(("photo", (card_png, p_path, c_sub)))
+                    raw_durations.append(c_dur)
+                else:
+                    v_file = item.get("file") or item.get("filename") or item.get("path")
+                    v_path = Path(v_file) if Path(v_file).is_absolute() else (WORKSPACE_ROOT / v_file if (WORKSPACE_ROOT / v_file).exists() else (footage_dir / v_file if footage_dir else Path(v_file)))
+                    st = float(item.get("start", 1.5))
+                    et = float(item.get("end", st + video_clip_duration))
+                    dur = et - st
+                    cap = item.get("caption", f"Scene {i+1:02d}")
+                    actions.append(("video", (v_path, st, et, cap)))
+                    raw_durations.append(dur)
+            elif isinstance(item, (list, tuple)):
+                if item[0] == "photo":
+                    _, p_file, c_title, c_sub, c_angle, c_dur = item
+                    p_path = Path(p_file) if Path(p_file).is_absolute() else (WORKSPACE_ROOT / p_file if (WORKSPACE_ROOT / p_file).exists() else (footage_dir / p_file if footage_dir else Path(p_file)))
+                    card_png = cards_dir / f"polaroid_{i:02d}.png"
+                    create_polaroid_card(
+                        p_path,
+                        title=c_title,
+                        subtitle=c_sub,
+                        angle=float(c_angle),
+                        out_png=card_png,
+                        canvas_size=(1080, 1920)
+                    )
+                    actions.append(("photo", (card_png, p_path, c_sub)))
+                    raw_durations.append(float(c_dur))
+                elif item[0] == "video":
+                    _, v_file, st, et, cap = item
+                    v_path = Path(v_file) if Path(v_file).is_absolute() else (WORKSPACE_ROOT / v_file if (WORKSPACE_ROOT / v_file).exists() else (footage_dir / v_file if footage_dir else Path(v_file)))
+                    st = float(st)
+                    et = float(et)
+                    actions.append(("video", (v_path, st, et, cap)))
+                    raw_durations.append(et - st)
+    else:
+        # 1. Discover Media
+        vids = sorted(list(footage_dir.glob("*.mp4")) + list(footage_dir.glob("*.MP4")))
+        imgs = sorted(list(footage_dir.glob("*.jpg")) + list(footage_dir.glob("*.JPG")))
 
-    # Determine timeline count based on max_duration
-    pair_count = max(2, int(max_duration / 7.0))
-    selected_vids = vids[:pair_count * 2] if len(vids) >= pair_count * 2 else vids
-    selected_imgs = imgs[:pair_count] if len(imgs) >= pair_count else imgs
+        if not vids:
+            raise ValueError(f"No video files found in {footage_dir}")
 
-    # 2. Render Polaroid Cards
-    polaroid_items = []
-    for i, img_path in enumerate(selected_imgs):
-        card_png = cards_dir / f"polaroid_{i:02d}.png"
-        tilt = -2.5 if i % 2 == 0 else 2.5
-        create_polaroid_card(
-            img_path,
-            title=img_path.stem.replace("_", " "),
-            subtitle=subtitle,
-            angle=tilt,
-            out_png=card_png
-        )
+        # Determine timeline count based on max_duration
+        pair_count = max(2, int(max_duration / 7.0))
+        selected_vids = vids[:pair_count * 2] if len(vids) >= pair_count * 2 else vids
+        selected_imgs = imgs[:pair_count] if len(imgs) >= pair_count else imgs
 
-        polaroid_items.append((card_png, img_path))
+        # 2. Render Polaroid Cards
+        polaroid_items = []
+        for i, img_path in enumerate(selected_imgs):
+            card_png = cards_dir / f"polaroid_{i:02d}.png"
+            tilt = -2.5 if i % 2 == 0 else 2.5
+            create_polaroid_card(
+                img_path,
+                title=img_path.stem.replace("_", " "),
+                subtitle=subtitle,
+                angle=tilt,
+                out_png=card_png
+            )
+
+            polaroid_items.append((card_png, img_path))
+
+        # Build sequence of segment durations
+        raw_durations = []
+        temp_total = 0.0
+        v_idx = 0
+        p_idx = 0
+        actions = []
+
+        while temp_total < max_duration and (v_idx < len(selected_vids) or p_idx < len(polaroid_items)):
+            for _ in range(2 if p_idx < len(polaroid_items) else 1):
+                if v_idx < len(selected_vids) and temp_total < max_duration:
+                    actions.append(("video", (selected_vids[v_idx], 1.5, 1.5 + video_clip_duration, f"Exploring {footage_dir.name.replace('_', ' ').title()}")))
+                    raw_durations.append(video_clip_duration)
+                    temp_total += video_clip_duration
+                    v_idx += 1
+
+            if p_idx < len(polaroid_items) and temp_total < max_duration:
+                actions.append(("photo", (polaroid_items[p_idx][0], polaroid_items[p_idx][1], subtitle)))
+                raw_durations.append(photo_card_duration)
+                temp_total += photo_card_duration
+                p_idx += 1
+
+        if v_idx < len(selected_vids):
+            actions.append(("video", (selected_vids[v_idx], 1.5, 1.5 + min(4.5, video_clip_duration), f"Exploring {footage_dir.name.replace('_', ' ').title()}")))
+            raw_durations.append(min(4.5, video_clip_duration))
 
     # 3. Optional AI Beat-Drop Sync
     music_file = resolve_audio(music_track) or resolve_audio("happy_summer.mp3")
@@ -95,31 +179,6 @@ def render(
         beat_info = detect_beats(music_file, duration=max_duration)
         detected_beats = beat_info.get("beats", [])
         print(f"   Detected {len(detected_beats)} beat transients (Estimated {beat_info.get('tempo_estimate_bpm')} BPM)")
-
-    # Build sequence of segment durations
-    raw_durations = []
-    temp_total = 0.0
-    v_idx = 0
-    p_idx = 0
-    actions = [] # ("video", v_idx) or ("photo", p_idx)
-
-    while temp_total < max_duration and (v_idx < len(selected_vids) or p_idx < len(polaroid_items)):
-        for _ in range(2 if p_idx < len(polaroid_items) else 1):
-            if v_idx < len(selected_vids) and temp_total < max_duration:
-                actions.append(("video", selected_vids[v_idx]))
-                raw_durations.append(video_clip_duration)
-                temp_total += video_clip_duration
-                v_idx += 1
-
-        if p_idx < len(polaroid_items) and temp_total < max_duration:
-            actions.append(("photo", polaroid_items[p_idx]))
-            raw_durations.append(photo_card_duration)
-            temp_total += photo_card_duration
-            p_idx += 1
-
-    if v_idx < len(selected_vids):
-        actions.append(("video", selected_vids[v_idx]))
-        raw_durations.append(min(4.5, video_clip_duration))
 
     if beat_sync and detected_beats:
         planned_durations, _ = snap_timeline_to_beats(raw_durations, detected_beats)
@@ -137,22 +196,44 @@ def render(
         seg_out = tmp_dir / f"seg_{seg_idx:02d}.mp4"
 
         if act_type == "video":
-            v_path = act_data
-            conform_clip(
-                v_path,
-                start=1.5,
-                end=1.5 + dur,
-                out_path=seg_out,
-                target_res="1080x1920",
-                fps=24,
-                color_filter=color_vf,
-                accel=accel,
-                smart_crop=smart_crop
-            )
-            timeline_segments.append(seg_out)
-            shot_captions.append((dur, f"Exploring {footage_dir.name.replace('_', ' ').title()}"))
+            if isinstance(act_data, tuple):
+                v_path, st, et, cap = act_data
+                conform_clip(
+                    v_path,
+                    start=st,
+                    end=et,
+                    out_path=seg_out,
+                    target_res="1080x1920",
+                    fps=24,
+                    color_filter=color_vf,
+                    zoom_rate=0.015,
+                    accel=accel,
+                    smart_crop=smart_crop
+                )
+                timeline_segments.append(seg_out)
+                shot_captions.append((dur, cap))
+            else:
+                v_path = act_data
+                conform_clip(
+                    v_path,
+                    start=1.5,
+                    end=1.5 + dur,
+                    out_path=seg_out,
+                    target_res="1080x1920",
+                    fps=24,
+                    color_filter=color_vf,
+                    zoom_rate=0.015,
+                    accel=accel,
+                    smart_crop=smart_crop
+                )
+                timeline_segments.append(seg_out)
+                shot_captions.append((dur, f"Exploring {footage_dir.name.replace('_', ' ').title() if footage_dir else 'Yorkshire'}"))
         else:
-            c_png, orig_img = act_data
+            if isinstance(act_data, tuple) and len(act_data) == 3:
+                c_png, orig_img, cap = act_data
+            else:
+                c_png, orig_img = act_data[:2]
+                cap = subtitle
             render_photo_motion_segment(
                 c_png,
                 orig_img,
@@ -162,7 +243,7 @@ def render(
                 fps=24
             )
             timeline_segments.append(seg_out)
-            shot_captions.append((dur, f"{subtitle}"))
+            shot_captions.append((dur, cap))
 
         curr_total += dur
 
@@ -283,7 +364,18 @@ def render(
     # Cleanup tmp
     shutil.rmtree(tmp_dir, ignore_errors=True)
 
-    # 8. Deliverable verification
+    # 8. Update backward-compatible symlink in edit/
+    symlink_path = WORKSPACE_ROOT / "edit" / output_file.name
+    if symlink_path.parent.exists() and (output_file.resolve() != symlink_path.resolve()):
+        if symlink_path.is_symlink() or symlink_path.exists():
+            symlink_path.unlink()
+        try:
+            rel_target = output_file.relative_to(symlink_path.parent)
+            symlink_path.symlink_to(rel_target)
+        except Exception:
+            pass
+
+    # 9. Deliverable verification
     qc_res = validate_deliverable(output_file, expected_aspect="9:16")
     return {
         "output_file": str(output_file),

@@ -1,0 +1,88 @@
+name: "Catchy Instagram Reel: Yorkshire Road Trip"
+preset: "insta_catchy_reel"
+title: "YORKSHIRE ROAD TRIP"
+subtitle: "YORK • SCARBOROUGH • WHITBY"
+outro_title: "EXPLORE YORKSHIRE"
+outro_subtitle: "Save this for your road trip 📍"
+handle: "@yorkshire.travels"
+
+footage_dir: "."
+output_file: "edit/reels_9x16/catchy_insta_reel_9x16.mp4"
+qc_file: "edit/verify/qc_sheet_insta_reel.png"
+
+grade: "clean_landscape"
+lut: "CINECOLOR_GOLDEN_HOUR.CUBE"
+music: "solas_jamie_duffy.mp3"
+sfx: "ocean_waves_crashing.mp3"
+black_bars: true
+
+voiceover:
+  speed: 0.92
+  text: >-
+    Winding down through the Yorkshire moors, as the salt air announces the open sea. |
+    From the grandeur of York's ancient Minster to the quiet shadows of centuries-old stone. |
+    Every road in Yorkshire carries a memory... of tides, cobblestones, and the open horizon.
+
+shots:
+  - type: "video"
+    file: "raw_footage/whitby/20260906_105056.mp4"
+    start: 1.5
+    end: 5.5
+    caption: "Country road towards the coast"
+
+  - type: "video"
+    file: "raw_footage/scarboro/20260905_160428.mp4"
+    start: 3.0
+    end: 7.0
+    caption: "Coastal cliff approach"
+
+  - type: "photo"
+    file: "assets/photos/scarborough_bay.jpg"
+    title: "SCARBOROUGH SOUTH BAY"
+    subtitle: "Queen of the Yorkshire Coast"
+    angle: -2.5
+    duration: 2.6
+
+  - type: "video"
+    file: "raw_footage/scarboro/20260905_184406.mp4"
+    start: 29.0
+    end: 33.5
+    caption: "Scarborough seaside promenade"
+
+  - type: "video"
+    file: "raw_footage/york/day1_part1/20260903_121155.mp4"
+    start: 2.0
+    end: 6.0
+    caption: "Arriving at York Station"
+
+  - type: "photo"
+    file: "assets/photos/york_shambles.jpg"
+    title: "THE SHAMBLES"
+    subtitle: "Historic Medieval York"
+    angle: 2.0
+    duration: 2.6
+
+  - type: "video"
+    file: "raw_footage/york/day1_part2/20260903_183008.mp4"
+    start: 4.0
+    end: 8.5
+    caption: "York Minster Gothic facade"
+
+  - type: "video"
+    file: "raw_footage/whitby/20260906_134022.mp4"
+    start: 12.0
+    end: 16.0
+    caption: "Crossing high above Whitby harbour"
+
+  - type: "photo"
+    file: "assets/photos/whitby_abbey.jpg"
+    title: "WHITBY ABBEY"
+    subtitle: "Dramatic Coastal Ruins"
+    angle: -1.8
+    duration: 2.6
+
+  - type: "video"
+    file: "raw_footage/whitby/20260906_154424.mp4"
+    start: 0.5
+    end: 4.5
+    caption: "Open moors highway journey"
